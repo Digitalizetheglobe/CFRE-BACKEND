@@ -1,21 +1,25 @@
 const express = require('express');
-const cors = require('cors'); // Import the cors package
+const cors = require('cors');
 const app = express();
 const propertyRoutes = require('./routes/propertyRoutes');
 
 // Configure CORS
 const corsOptions = {
-  origin: 'http://localhost:3000', // Allow requests from this origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these methods
-  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-app.use(cors(corsOptions)); // Enable CORS with configuration
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use('/properties', propertyRoutes);
-app.use('/uploads', express.static('uploads')); // Serve images statically
+app.use('/uploads', express.static('uploads'));
 
+// Use the property routes
+app.use('/', propertyRoutes); 
+
+// Define the port
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
+
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });

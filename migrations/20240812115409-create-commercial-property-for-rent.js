@@ -21,6 +21,9 @@ module.exports = {
       location: {
         type: Sequelize.STRING
       },
+      city: { 
+        type: Sequelize.STRING
+      },
       builtUpArea: {
         type: Sequelize.FLOAT
       },
