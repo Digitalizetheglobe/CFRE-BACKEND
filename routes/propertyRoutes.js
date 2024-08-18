@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const { CommercialPropertyForRent, CommercialPropertyForSale } = require('../models');
 const { PreleaseProperty } = require('../models');
+const { PropertyInquiry } = require('../models');
 
 // Configure Multer storage
 const storage = multer.diskStorage({
@@ -214,6 +215,54 @@ router.get('/properties', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+
+
+router.post('/inquire', async (req, res) => {
+  try {
+    const { name, mobile, email, propertyName, propertyId } = req.body;
+
+    const inquiry = await PropertyInquiry.create({
+      name,
+      mobile,
+      email,
+      propertyName,
+      propertyId
+    });
+
+    res.status(201).json(inquiry);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+// Route to get all Property Inquiries
+router.get('/inquiries', async (req, res) => {
+  try {
+    const inquiries = await PropertyInquiry.findAll();
+    res.status(200).json(inquiries);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route to get a single Property Inquiry by ID
+router.get('/inquiries/:id', async (req, res) => {
+  try {
+    const inquiry = await PropertyInquiry.findByPk(req.params.id);
+    if (inquiry) {
+      res.status(200).json(inquiry);
+    } else {
+      res.status(404).json({ error: 'Inquiry not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 
 module.exports = router;
 
