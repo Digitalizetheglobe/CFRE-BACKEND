@@ -60,6 +60,21 @@ module.exports = {
       agreementCharges: {
         type: Sequelize.FLOAT
       },
+      // New fields added here
+      propertyType: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          isIn: [['Rent', 'Sale']]
+        }
+      },
+      propertyStatus: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          isIn: [['Furnished', 'Unfurnished', 'CoWorking', 'Managed Spaces']]
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       bannerImage: {
-        type: DataTypes.STRING,  // Store the URL or file path of the image
+        type: DataTypes.STRING,  
         allowNull: true,
       },
     });

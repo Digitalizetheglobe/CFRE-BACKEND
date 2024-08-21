@@ -5,6 +5,8 @@ const path = require('path');
 const { CommercialPropertyForRent, CommercialPropertyForSale } = require('../models');
 const { PreleaseProperty } = require('../models');
 const { PropertyInquiry } = require('../models');
+const { AddProperty } = require('../models');
+
 
 // Configure Multer storage
 const storage = multer.diskStorage({
@@ -35,6 +37,7 @@ router.post('/rent', upload.single('bannerImage'), async (req, res) => {
 
 // Route to create a new Commercial Property For Sale with image upload
 router.post('/sale', upload.single('bannerImage'), async (req, res) => {
+  console.log(req.body);  // Debugging line
   try {
     const bannerImage = req.file ? req.file.path : null;
     const property = await CommercialPropertyForSale.create({
@@ -42,10 +45,11 @@ router.post('/sale', upload.single('bannerImage'), async (req, res) => {
       bannerImage: bannerImage,
     });
     res.status(201).json(property);
-  } catch (error) {``
+  } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Route to get all Commercial Properties For Sale
 router.get('/sale', async (req, res) => {
   try {
@@ -261,6 +265,69 @@ router.get('/inquiries/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+
+// Route to create a new property in AddProperties with image upload
+router.post('/addproperty', upload.single('bannerImage'), async (req, res) => {
+  try {
+    const bannerImage = req.file ? req.file.path : null;
+    const property = await AddProperty.create({
+      ...req.body,
+      bannerImage: bannerImage,
+    });
+    res.status(201).json(property);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route to get all properties from AddProperties
+router.get('/addproperty', async (req, res) => {
+  try {
+    const properties = await AddProperty.findAll();
+    res.status(200).json(properties);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route to get a single property from AddProperties by ID
+router.get('/addproperty/:id', async (req, res) => {
+  try {
+    const property = await AddProperty.findByPk(req.params.id);
+    if (property) {
+      res.status(200).json(property);
+    } else {
+      res.status(404).json({ error: 'Property not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route to update a property in AddProperties by ID
+router.put('/addproperty/:id', upload.single('bannerImage'), async (req, res) => {
+  try {
+    const bannerImage = req.file ? req.file.path : null;
+    const [updated] = await AddProperty.update({
+      ...req.body,
+      bannerImage: bannerImage,
+    }, {
+      where: { id: req.params.id }
+    });
+
+    if (updated) {
+      const updatedProperty = await AddProperty.findByPk(req.params.id);
+      res.status(200).json(updatedProperty);
+    } else {
+      res.status(404).json({ error: 'Property not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 
 

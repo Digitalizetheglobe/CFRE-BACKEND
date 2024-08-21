@@ -45,6 +45,12 @@ module.exports = {
       totalPrice: {
         type: Sequelize.FLOAT
       },
+      propertyType: {
+        type: Sequelize.STRING // or Sequelize.STRING(255) if you need a specific length
+      },
+      propertyStatus: {
+        type: Sequelize.STRING // or Sequelize.STRING(255) if you need a specific length
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

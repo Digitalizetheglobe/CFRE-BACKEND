@@ -25,7 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     amenities: DataTypes.TEXT,
     furnishedDetails: DataTypes.JSON,
     pricePerSqFt: DataTypes.FLOAT,
-    totalPrice: DataTypes.FLOAT
+    totalPrice: DataTypes.FLOAT,
+    propertyType: DataTypes.STRING,
+    propertyStatus: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'CommercialPropertyForSale',
