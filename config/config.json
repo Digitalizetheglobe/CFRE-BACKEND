@@ -14,8 +14,8 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": "root",
+    "username": "cfre_user",
+    "password": "cfre_password",
     "database": "cfre_main",
     "host": "127.0.0.1",
     "dialect": "mysql"
