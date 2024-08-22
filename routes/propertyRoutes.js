@@ -6,6 +6,9 @@ const { CommercialPropertyForRent, CommercialPropertyForSale } = require('../mod
 const { PreleaseProperty } = require('../models');
 const { PropertyInquiry } = require('../models');
 const { AddProperty } = require('../models');
+const { SaleProperty } = require('../models');
+
+
 
 
 // Configure Multer storage
@@ -18,8 +21,73 @@ const storage = multer.diskStorage({
   }
 });
 
+
 // Initialize the upload middleware
 const upload = multer({ storage: storage });
+
+
+// Route to create a new Sale Property with image upload
+router.post('/saleproperty', upload.single('bannerImage'), async (req, res) => {
+  try {
+    const bannerImage = req.file ? req.file.path : null;
+    const saleProperty = await SaleProperty.create({
+      ...req.body,
+      bannerImage: bannerImage,
+    });
+    res.status(201).json(saleProperty);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+// Route to create a new Sale Property with image upload
+router.post('/saleproperty', upload.single('bannerImage'), async (req, res) => {
+  try {
+    const bannerImage = req.file ? req.file.path : null;
+    const property = await SaleProperty.create({
+      ...req.body,
+      bannerImage: bannerImage,
+    });
+    res.status(201).json(property);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route to get all Sale Properties
+router.get('/saleproperty', async (req, res) => {
+  try {
+    const properties = await SaleProperty.findAll();
+    res.status(200).json(properties);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+// Route to update a Sale Property by ID
+router.put('/saleproperty/:id', upload.single('bannerImage'), async (req, res) => {
+  try {
+    const bannerImage = req.file ? req.file.path : null;
+    const [updated] = await SaleProperty.update({
+      ...req.body,
+      bannerImage: bannerImage,
+    }, {
+      where: { id: req.params.id }
+    });
+
+    if (updated) {
+      const updatedSaleProperty = await SaleProperty.findByPk(req.params.id);
+      res.status(200).json(updatedSaleProperty);
+    } else {
+      res.status(404).json({ error: 'Sale Property not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
 
 // Route to create a new Commercial Property For Rent with image upload
 router.post('/rent', upload.single('bannerImage'), async (req, res) => {
@@ -220,6 +288,38 @@ router.get('/properties', async (req, res) => {
   }
 });
 
+
+//routes to get new api AddPrpety and saleproperty
+// router.get('/allproperties', async (req, res)=> {
+//   try{
+//     const saleproperty = await SaleProperty .findAll();
+//     const addproperty = await AddProperty .findAll();
+   
+//     const myallProperties =[
+//       ...saleproperty.map(property => ({...property.toJSON()})),
+//       ...addproperty.map(property=>({...property.toJSON}))
+//     ];
+//     res.status(200).json(myallProperties)
+//   }catch(error){
+//     res.status(500).json({error:error.message});
+//   }
+// })
+// Route to get combined properties from AddProperty and SaleProperty
+router.get('/newallproperties', async (req, res) => {
+  try {
+    const saleProperties = await SaleProperty.findAll();
+    const addProperties = await AddProperty.findAll();
+
+    const allProperties = [
+      ...saleProperties.map(property => ({ ...property.toJSON(), type: 'sale' })),
+      ...addProperties.map(property => ({ ...property.toJSON(), type: 'add' }))
+    ];
+
+    res.status(200).json(allProperties);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 
 
