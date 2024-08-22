@@ -15,7 +15,7 @@
   },
   "production": {
     "username": "cfre_user",
-    "password": "cfre_password",
+    "password": "Str0ng_P@ssw0rd!",
     "database": "cfre_main",
     "host": "127.0.0.1",
     "dialect": "mysql"
