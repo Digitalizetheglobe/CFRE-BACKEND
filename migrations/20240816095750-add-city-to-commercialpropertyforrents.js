@@ -1,17 +1,14 @@
-'use strict';
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.sequelize.query(`
-      ALTER TABLE CommercialPropertyForRents
-      ADD COLUMN city VARCHAR(255) NULL;
-    `);
+  up: async (queryInterface, Sequelize) => {
+    const tableInfo = await queryInterface.describeTable('commercialpropertyforrents');
+    if (!tableInfo.city) {
+      await queryInterface.addColumn('commercialpropertyforrents', 'city', {
+        type: Sequelize.STRING,
+        allowNull: false,
+      });
+    }
   },
-
-  async down(queryInterface, Sequelize) {
-    await queryInterface.sequelize.query(`
-      ALTER TABLE CommercialPropertyForRents
-      DROP COLUMN city;
-    `);
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.removeColumn('commercialpropertyforrents', 'city');
   }
 };
