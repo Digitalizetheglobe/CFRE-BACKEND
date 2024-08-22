@@ -65,26 +65,20 @@ router.get('/saleproperty', async (req, res) => {
   }
 });
 // Route to update a Sale Property by ID
-router.put('/saleproperty/:id', upload.single('bannerImage'), async (req, res) => {
+// Route to get a single Sale Property by ID
+router.get('/saleproperty/:id', async (req, res) => {
   try {
-    const bannerImage = req.file ? req.file.path : null;
-    const [updated] = await SaleProperty.update({
-      ...req.body,
-      bannerImage: bannerImage,
-    }, {
-      where: { id: req.params.id }
-    });
-
-    if (updated) {
-      const updatedSaleProperty = await SaleProperty.findByPk(req.params.id);
-      res.status(200).json(updatedSaleProperty);
+    const property = await SaleProperty.findByPk(req.params.id);
+    if (property) {
+      res.status(200).json(property);
     } else {
-      res.status(404).json({ error: 'Sale Property not found' });
+      res.status(404).json({ error: 'Property not found' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 
 
