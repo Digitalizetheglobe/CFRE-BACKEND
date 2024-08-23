@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const propertyRoutes = require('./routes/propertyRoutes');
+// const projectRoutes = require ('./routes/projectRoutes')
 
 // Configure CORS
 const corsOptions = {
@@ -16,6 +17,7 @@ app.use('/uploads', express.static('uploads'));
 
 // Use the property routes
 app.use('/', propertyRoutes); 
+// app.use('/project', projectRoutes);
 
 // Define the port
 const PORT = process.env.PORT || 8000;
