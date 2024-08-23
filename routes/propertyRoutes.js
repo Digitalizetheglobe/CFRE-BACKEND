@@ -7,7 +7,7 @@ const { PreleaseProperty } = require('../models');
 const { PropertyInquiry } = require('../models');
 const { AddProperty } = require('../models');
 const { SaleProperty } = require('../models');
-const {Project} = require ('../models')
+const { Project } = require('../models')
 
 
 
@@ -15,10 +15,10 @@ const {Project} = require ('../models')
 // Configure Multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); 
+    cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); 
+    cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
@@ -27,21 +27,18 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-
-
-
-
-
-
 // Create a new Project
-router.post('/projects', async (req, res) => {
+router.post('/projects', async ( req, res) => {
   try {
+    console.log('Request body:', req.body);
     const project = await Project.create(req.body);
     res.status(201).json(project);
   } catch (error) {
+    console.error('Error creating project:', error);
     res.status(500).json({ error: 'Failed to create project' });
   }
 });
+
 
 // Get all Projects
 router.get('/projects', async (req, res) => {
@@ -256,7 +253,7 @@ router.put('/rent/:id', upload.single('bannerImage'), async (req, res) => {
       res.status(404).json({ error: 'Property not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });                                   
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -297,7 +294,7 @@ router.get('/prelease', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
- 
+
 
 // Route to get a single Prelease Property by ID
 router.get('/prelease/:id', async (req, res) => {
@@ -378,7 +375,7 @@ router.get('/properties', async (req, res) => {
 //   try{
 //     const saleproperty = await SaleProperty .findAll();
 //     const addproperty = await AddProperty .findAll();
-   
+
 //     const myallProperties =[
 //       ...saleproperty.map(property => ({...property.toJSON()})),
 //       ...addproperty.map(property=>({...property.toJSON}))

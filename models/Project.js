@@ -1,85 +1,81 @@
 // models/Project.js
-
 module.exports = (sequelize, DataTypes) => {
     const Project = sequelize.define('Project', {
       projectName: {
         type: DataTypes.STRING,
-        allowNull: true, // Field is optional
+        allowNull: true,
       },
       reraRegdNo: {
         type: DataTypes.STRING,
-        allowNull: true, // Field is optional
+        allowNull: true,
       },
       builderName: {
         type: DataTypes.STRING,
-        allowNull: true, // Field is optional
+        allowNull: true,
       },
       projectDetails: {
         type: DataTypes.TEXT,
-        allowNull: true, // Field is optional
+        allowNull: true,
       },
       price: {
         type: DataTypes.STRING,
-        allowNull: true, // Field is optional
+        allowNull: true,
       },
       area: {
         type: DataTypes.STRING,
-        allowNull: true, // Field is optional
+        allowNull: true,
       },
       projectArea: {
         type: DataTypes.STRING,
-        allowNull: true, // Field is optional
+        allowNull: true,
       },
       possession: {
         type: DataTypes.STRING,
-        allowNull: true, // Field is optional
+        allowNull: true,
       },
       city: {
         type: DataTypes.STRING,
-        allowNull: true, // Field is optional
+        allowNull: true,
       },
       location: {
         type: DataTypes.STRING,
-        allowNull: true, // Field is optional
+        allowNull: true,
       },
       commencementCertificate: {
         type: DataTypes.STRING,
-        allowNull: true, // Field is optional
+        allowNull: true,
       },
       occupancyCertificate: {
         type: DataTypes.STRING,
-        allowNull: true, // Field is optional
+        allowNull: true,
       },
       approvedBy: {
         type: DataTypes.STRING,
-        allowNull: true, // Field is optional
+        allowNull: true,
       },
       specification: {
-        type: DataTypes.TEXT, // Storing multiple points
-        allowNull: true, // Field is optional
+        type: DataTypes.JSON, // Use JSON for MySQL
       },
       projectPlans: {
-        type: DataTypes.JSON, // Storing project plans as JSON
-        allowNull: true, // Field is optional
+        type: DataTypes.JSON, // Use JSON for MySQL
       },
       amenities: {
-        type: DataTypes.STRING,
-        allowNull: true, // Field is optional
+        type: DataTypes.JSON, // Use JSON for MySQL
       },
       floorPlanImages: {
-        type: DataTypes.JSON, // Storing multiple images as JSON
-        allowNull: true, // Field is optional
+        type: DataTypes.JSON, // Use JSON for multiple images
+        allowNull: true,
       },
       video: {
-        type: DataTypes.STRING, // Storing YouTube video link
-        allowNull: true, // Field is optional
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       virtualVideoTour: {
-        type: DataTypes.STRING, // Storing YouTube video link
-        allowNull: true, // Field is optional
+        type: DataTypes.STRING,
+        allowNull: true,
       }
     }, {
-      timestamps: false // Disabling createdAt and updatedAt fields
+      timestamps: false
     });
   
     return Project;
