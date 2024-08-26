@@ -2,25 +2,37 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn('CommercialPropertyForRents', 'propertyType', {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        isIn: [['Rent', 'Sale']]
-      }
-    });
+    // Check if the column already exists
+    const tableInfo = await queryInterface.describeTable('CommercialPropertyForRents');
 
-    await queryInterface.addColumn('CommercialPropertyForRents', 'propertyStatus', {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        isIn: [['Furnished', 'Unfurnished', 'CoWorking', 'Managed Spaces']]
-      }
-    });
+    if (!tableInfo.propertyType) {
+      await queryInterface.addColumn('CommercialPropertyForRents', 'propertyType', {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          isIn: [['Rent', 'Sale']]
+        }
+      });
+    }
+
+    if (!tableInfo.propertyStatus) {
+      await queryInterface.addColumn('CommercialPropertyForRents', 'propertyStatus', {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          isIn: [['Furnished', 'Unfurnished', 'CoWorking', 'Managed Spaces']]
+        }
+      });
+    }
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn('CommercialPropertyForRents', 'propertyType');
-    await queryInterface.removeColumn('CommercialPropertyForRents', 'propertyStatus');
+    if (tableInfo.propertyType) {
+      await queryInterface.removeColumn('CommercialPropertyForRents', 'propertyType');
+    }
+
+    if (tableInfo.propertyStatus) {
+      await queryInterface.removeColumn('CommercialPropertyForRents', 'propertyStatus');
+    }
   }
 };
