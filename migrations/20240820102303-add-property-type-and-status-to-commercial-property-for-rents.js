@@ -27,6 +27,9 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
+    // Check if the column exists before removing it
+    const tableInfo = await queryInterface.describeTable('CommercialPropertyForRents');
+
     if (tableInfo.propertyType) {
       await queryInterface.removeColumn('CommercialPropertyForRents', 'propertyType');
     }
