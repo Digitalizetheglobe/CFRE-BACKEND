@@ -20,7 +20,7 @@ app.use('/', propertyRoutes);
 // app.use('/project', projectRoutes);
 
 // Define the port
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8001;
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
