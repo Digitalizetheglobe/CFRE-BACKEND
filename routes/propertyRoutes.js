@@ -11,6 +11,7 @@ const { Project } = require('../models')
 // const { contactForm } = require('../models');
 // const {ContactForm} = require('../models');
 const { ContactForm } = require('../models'); 
+const {ShowroomProperty }= require('../models');
 
 // Configure Multer storage
 const storage = multer.diskStorage({
@@ -24,6 +25,40 @@ const storage = multer.diskStorage({
 
 // Initialize the upload middleware
 const upload = multer({ storage: storage });
+
+
+
+
+
+
+
+
+// POST route to create a showroom property
+router.post('/showroomproperty', async (req, res) => {
+  try {
+      const showroomProperty = await ShowroomProperty.create(req.body);
+      res.status(201).json(showroomProperty);
+  } catch (error) {
+      res.status(500).json({ error: 'Failed to create showroom property' });
+  }
+});
+
+// GET route to fetch all showroom properties
+router.get('/showroomproperty', async (req, res) => {
+  try {
+      const showroomProperties = await ShowroomProperty.findAll();
+      res.status(200).json(showroomProperties);
+  } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch showroom properties' });
+  }
+});
+
+
+
+
+
+
+
 // POST route for the contact form
 router.post('/contactform', async (req, res) => {
   try {
