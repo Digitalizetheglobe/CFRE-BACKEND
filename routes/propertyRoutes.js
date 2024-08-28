@@ -8,9 +8,9 @@ const { PropertyInquiry } = require('../models');
 const { AddProperty } = require('../models');
 const { SaleProperty } = require('../models');
 const { Project } = require('../models')
-
-
-
+// const { contactForm } = require('../models');
+// const {ContactForm} = require('../models');
+const { ContactForm } = require('../models'); 
 
 // Configure Multer storage
 const storage = multer.diskStorage({
@@ -22,13 +22,35 @@ const storage = multer.diskStorage({
   }
 });
 
-
 // Initialize the upload middleware
 const upload = multer({ storage: storage });
+// POST route for the contact form
+router.post('/contactform', async (req, res) => {
+  try {
+    console.log('Request Body:', req.body);
+    const contactform = await ContactForm.create(req.body);
+    res.status(201).json(contactform);
+  } catch (error) {
+    console.error('Error creating contact form:', error);
+    res.status(500).json({ error: 'Failed to create contact form', details: error.message });
+  }
+});
 
-// migration
+// GET route to retrieve all contact forms
+router.get('/contactforms', async (req, res) => {
+  try {
+    const contactForms = await ContactForm.findAll(); // Fetch all records from the ContactForms table
+    res.status(200).json(contactForms); // Respond with the retrieved records
+  } catch (error) {
+    console.error('Error fetching contact forms:', error); // Log any errors that occur
+    res.status(500).json({ error: 'Failed to retrieve contact forms' }); // Respond with a 500 error if something goes wrong
+  }
+});
+
+
+
 // Create a new Project
-router.post('/projects', async ( req, res) => {
+router.post('/projects', async (req, res) => {
   try {
     console.log('Request body:', req.body);
     const project = await Project.create(req.body);
@@ -95,26 +117,8 @@ router.delete('/projects/:id', async (req, res) => {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Route to create a new Sale Property with image upload
-router.post('/saleproperty', upload.single('bannerImage'), async (req, res) => {
+router.post('/investproperty', upload.single('bannerImage'), async (req, res) => {
   try {
     const bannerImage = req.file ? req.file.path : null;
     const saleProperty = await SaleProperty.create({
@@ -129,7 +133,7 @@ router.post('/saleproperty', upload.single('bannerImage'), async (req, res) => {
 
 
 // Route to create a new Sale Property with image upload
-router.post('/saleproperty', upload.single('bannerImage'), async (req, res) => {
+router.post('/investproperty', upload.single('bannerImage'), async (req, res) => {
   try {
     const bannerImage = req.file ? req.file.path : null;
     const property = await SaleProperty.create({
@@ -143,7 +147,7 @@ router.post('/saleproperty', upload.single('bannerImage'), async (req, res) => {
 });
 
 // Route to get all Sale Properties
-router.get('/saleproperty', async (req, res) => {
+router.get('/investproperty', async (req, res) => {
   try {
     const properties = await SaleProperty.findAll();
     res.status(200).json(properties);
@@ -153,7 +157,7 @@ router.get('/saleproperty', async (req, res) => {
 });
 // Route to update a Sale Property by ID
 // Route to get a single Sale Property by ID
-router.get('/saleproperty/:id', async (req, res) => {
+router.get('/investproperty/:id', async (req, res) => {
   try {
     const property = await SaleProperty.findByPk(req.params.id);
     if (property) {
@@ -208,7 +212,6 @@ router.get('/sale', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 
 // Route to get all Commercial Properties For Rent
@@ -370,21 +373,6 @@ router.get('/properties', async (req, res) => {
 });
 
 
-//routes to get new api AddPrpety and saleproperty
-// router.get('/allproperties', async (req, res)=> {
-//   try{
-//     const saleproperty = await SaleProperty .findAll();
-//     const addproperty = await AddProperty .findAll();
-
-//     const myallProperties =[
-//       ...saleproperty.map(property => ({...property.toJSON()})),
-//       ...addproperty.map(property=>({...property.toJSON}))
-//     ];
-//     res.status(200).json(myallProperties)
-//   }catch(error){
-//     res.status(500).json({error:error.message});
-//   }
-// })
 // Route to get combined properties from AddProperty and SaleProperty
 router.get('/newallproperties', async (req, res) => {
   try {
@@ -401,8 +389,6 @@ router.get('/newallproperties', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
-
 
 router.post('/inquire', async (req, res) => {
   try {
@@ -447,10 +433,8 @@ router.get('/inquiries/:id', async (req, res) => {
   }
 });
 
-
-
 // Route to create a new property in AddProperties with image upload
-router.post('/addproperty', upload.single('bannerImage'), async (req, res) => {
+router.post('/rentproperties', upload.single('bannerImage'), async (req, res) => {
   try {
     const bannerImage = req.file ? req.file.path : null;
     const property = await AddProperty.create({
@@ -464,7 +448,7 @@ router.post('/addproperty', upload.single('bannerImage'), async (req, res) => {
 });
 
 // Route to get all properties from AddProperties
-router.get('/addproperty', async (req, res) => {
+router.get('/rentproperties', async (req, res) => {
   try {
     const properties = await AddProperty.findAll();
     res.status(200).json(properties);
@@ -474,7 +458,7 @@ router.get('/addproperty', async (req, res) => {
 });
 
 // Route to get a single property from AddProperties by ID
-router.get('/addproperty/:id', async (req, res) => {
+router.get('/rentproperties/:id', async (req, res) => {
   try {
     const property = await AddProperty.findByPk(req.params.id);
     if (property) {
@@ -488,7 +472,7 @@ router.get('/addproperty/:id', async (req, res) => {
 });
 
 // Route to update a property in AddProperties by ID
-router.put('/addproperty/:id', upload.single('bannerImage'), async (req, res) => {
+router.put('/rentproperties/:id', upload.single('bannerImage'), async (req, res) => {
   try {
     const bannerImage = req.file ? req.file.path : null;
     const [updated] = await AddProperty.update({
@@ -508,9 +492,5 @@ router.put('/addproperty/:id', upload.single('bannerImage'), async (req, res) =>
     res.status(500).json({ error: error.message });
   }
 });
-
-
-
-
 module.exports = router;
 
