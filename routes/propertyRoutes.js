@@ -33,7 +33,7 @@ const upload = multer({ storage: storage });
 
 
 
-// POST route to create a showroom property
+// POST route to create a showroom property USING RIGHT NOW
 router.post('/showroomproperty', async (req, res) => {
   try {
       const showroomProperty = await ShowroomProperty.create(req.body);
@@ -43,7 +43,7 @@ router.post('/showroomproperty', async (req, res) => {
   }
 });
 
-// GET route to fetch all showroom properties
+// GET route to fetch all showroom properties USING RIGHT NOW
 router.get('/showroomproperty', async (req, res) => {
   try {
       const showroomProperties = await ShowroomProperty.findAll();
@@ -59,7 +59,7 @@ router.get('/showroomproperty', async (req, res) => {
 
 
 
-// POST route for the contact form
+// POST route for the contact form USING RIGHT NOW
 router.post('/contactform', async (req, res) => {
   try {
     console.log('Request Body:', req.body);
@@ -71,7 +71,7 @@ router.post('/contactform', async (req, res) => {
   }
 });
 
-// GET route to retrieve all contact forms
+// GET route to retrieve all contact forms USING RIGHT NOW
 router.get('/contactforms', async (req, res) => {
   try {
     const contactForms = await ContactForm.findAll(); // Fetch all records from the ContactForms table
@@ -84,7 +84,7 @@ router.get('/contactforms', async (req, res) => {
 
 
 
-// Create a new Project
+// Create a new Project USING RIGHT NOW
 router.post('/projects', async (req, res) => {
   try {
     console.log('Request body:', req.body);
@@ -97,7 +97,7 @@ router.post('/projects', async (req, res) => {
 });
 
 
-// Get all Projects
+// Get all Projects USING RIGHT NOW
 router.get('/projects', async (req, res) => {
   try {
     const projects = await Project.findAll();
@@ -107,7 +107,7 @@ router.get('/projects', async (req, res) => {
   }
 });
     
-// Get a specific Project by ID
+// Get a specific Project by ID USING RIGHT NOW
 router.get('/projects/:id', async (req, res) => {
   try {
     const project = await Project.findByPk(req.params.id);
@@ -121,7 +121,7 @@ router.get('/projects/:id', async (req, res) => {
   }
 });
 
-// Update a Project by ID
+// Update a Project by ID USING RIGHT NOW
 router.put('/projects/:id', async (req, res) => {
   try {
     const project = await Project.findByPk(req.params.id);
@@ -136,7 +136,7 @@ router.put('/projects/:id', async (req, res) => {
   }
 });
 
-// Delete a Project by ID
+// Delete a Project by ID USING RIGHT NOW
 router.delete('/projects/:id', async (req, res) => {
   try {
     const project = await Project.findByPk(req.params.id);
@@ -152,7 +152,7 @@ router.delete('/projects/:id', async (req, res) => {
 });
 
 
-// Route to create a new Sale Property with image upload
+// Route to create a new Sale Property with image upload USING RIGHT NOW
 router.post('/investproperties', upload.single('bannerImage'), async (req, res) => {
   try {
     const bannerImage = req.file ? req.file.path : null;
@@ -167,7 +167,7 @@ router.post('/investproperties', upload.single('bannerImage'), async (req, res) 
 });
 
 
-// Route to create a new Sale Property with image upload
+// Route to create a new Sale Property with image upload USING RIGHT NOW
 router.post('/investproperties', upload.single('bannerImage'), async (req, res) => {
   try {
     const bannerImage = req.file ? req.file.path : null;
@@ -190,8 +190,7 @@ router.get('/investproperties', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Route to update a Sale Property by ID
-// Route to get a single Sale Property by ID
+// Route to get a single Sale Property by ID USING RIGHT NOW
 router.get('/investproperties/:id', async (req, res) => {
   try {
     const property = await SaleProperty.findByPk(req.params.id);
@@ -207,7 +206,7 @@ router.get('/investproperties/:id', async (req, res) => {
 
 
 
-
+// NOT IS USE THIS ROUTES START
 
 // Route to create a new Commercial Property For Rent with image upload
 router.post('/rent', upload.single('bannerImage'), async (req, res) => {
@@ -468,7 +467,14 @@ router.get('/inquiries/:id', async (req, res) => {
   }
 });
 
-// Route to create a new property in AddProperties with image upload
+//END
+
+
+
+
+
+
+// Route to create a new property in AddProperties with image upload USING RIGHT NOW
 router.post('/rentproperties', upload.single('bannerImage'), async (req, res) => {
   try {
     const bannerImage = req.file ? req.file.path : null;
@@ -482,7 +488,7 @@ router.post('/rentproperties', upload.single('bannerImage'), async (req, res) =>
   }
 });
 
-// Route to get all properties from AddProperties
+// Route to get all properties from AddProperties USING RIGHT NOW
 router.get('/rentproperties', async (req, res) => {
   try {
     const properties = await AddProperty.findAll();
@@ -492,7 +498,7 @@ router.get('/rentproperties', async (req, res) => {
   }
 });
 
-// Route to get a single property from AddProperties by ID
+// Route to get a single property from AddProperties by ID USING RIGHT NOW
 router.get('/rentproperties/:id', async (req, res) => {
   try {
     const property = await AddProperty.findByPk(req.params.id);
@@ -506,7 +512,7 @@ router.get('/rentproperties/:id', async (req, res) => {
   }
 });
 
-// Route to update a property in AddProperties by ID
+// Route to update a property in AddProperties by ID USING RIGHT NOW
 router.put('/rentproperties/:id', upload.single('bannerImage'), async (req, res) => {
   try {
     const bannerImage = req.file ? req.file.path : null;
@@ -527,5 +533,30 @@ router.put('/rentproperties/:id', upload.single('bannerImage'), async (req, res)
     res.status(500).json({ error: error.message });
   }
 });
+
+
+// Route to get combined properties from SaleProperty and AddProperty USING RIGHT NOW
+router.get('/combinedproperties', async (req, res) => {
+  console.log('Combined properties route hit');
+  try {
+    // Fetch data from investproperties (SaleProperty)
+    const investProperties = await SaleProperty.findAll();
+
+    // Fetch data from rentproperties (AddProperty)
+    const rentProperties = await AddProperty.findAll();
+
+    // Combine the results into one array
+    const combinedProperties = [
+      ...investProperties.map(property => ({ ...property.toJSON(), type: 'invest' })),
+      ...rentProperties.map(property => ({ ...property.toJSON(), type: 'rent' }))
+    ];
+
+    // Return the combined data as the response
+    res.status(200).json(combinedProperties);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch combined properties', details: error.message });
+  }
+});
+
 module.exports = router;
 

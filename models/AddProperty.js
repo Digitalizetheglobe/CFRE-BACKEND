@@ -1,78 +1,122 @@
 module.exports = (sequelize, DataTypes) => {
-    const AddProperty = sequelize.define('AddProperty', {
-      buildingName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      propertyType: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      buArea: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      carpetArea: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      rate: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      cost: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      furnishing: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      purpose: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      location: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      city: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      ws: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      cabin: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      conferenceOrMeetingRoom: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      carParking: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      bikeParking: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      dgBackup: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-      },
-      cafeteria: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-      },
-      bannerImage: {
-        type: DataTypes.STRING,
-        allowNull: true, // Assuming it's optional
-      },
-    });
+  const AddProperty = sequelize.define('AddProperty', {
+    buildingName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    propertyType: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    buArea: {
+      type: DataTypes.STRING, // Changed to STRING to allow both numbers and characters
+      allowNull: false,
+    },
+    carpetArea: {
+      type: DataTypes.STRING, // Changed to STRING to allow both numbers and characters
+      allowNull: false,
+    },
+    rate: {
+      type: DataTypes.STRING, // Changed to STRING to allow both numbers and characters
+      allowNull: false,
+    },
+    cost: {
+      type: DataTypes.STRING, // Changed to STRING to allow both numbers and characters
+      allowNull: false,
+    },
+    furnishing: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    purpose: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    ws: {
+      type: DataTypes.STRING, // Changed to STRING to allow both numbers and characters
+      allowNull: false,
+    },
+    cabin: {
+      type: DataTypes.STRING, // Changed to STRING to allow both numbers and characters
+      allowNull: false,
+    },
+    conferenceOrMeetingRoom: {
+      type: DataTypes.STRING, // Changed to STRING to allow both numbers and characters
+      allowNull: false,
+    },
+    carParking: {
+      type: DataTypes.STRING, // Changed to STRING to allow both numbers and characters
+      allowNull: false,
+    },
+    bikeParking: {
+      type: DataTypes.STRING, // Changed to STRING to allow both numbers and characters
+      allowNull: false,
+    },
+    dgBackup: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    cafeteria: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    bannerImage: {
+      type: DataTypes.STRING,
+      allowNull: true, // Assuming it's optional
+    },
+    unitNo: {
+      type: DataTypes.STRING, // Added new field
+      allowNull: true, // Adjust according to your needs
+    },
+    floor: {
+      type: DataTypes.STRING, // Added new field
+      allowNull: true, // Adjust according to your needs
+    },
+    workstation: {
+      type: DataTypes.STRING, // Added new field
+      allowNull: true, // Adjust according to your needs
+    },
+    anyOtherFurniture: {
+      type: DataTypes.STRING, // Added new field
+      allowNull: true, // Adjust according to your needs
+    },
+    rentPerSqFt: {
+      type: DataTypes.STRING, // Added new field
+      allowNull: true, // Adjust according to your needs
+    },
+    maintenancePerSqFt: {
+      type: DataTypes.STRING, // Added new field
+      allowNull: true, // Adjust according to your needs
+    },
+    deposit: {
+      type: DataTypes.STRING, // Added new field
+      allowNull: true, // Adjust according to your needs
+    },
+    yearlyEscalation: {
+      type: DataTypes.STRING, // Added new field
+      allowNull: true, // Adjust according to your needs
+    },
+    agreementPeriod: {
+      type: DataTypes.STRING, // Added new field
+      allowNull: true, // Adjust according to your needs
+    },
+    lockInPeriod: {
+      type: DataTypes.STRING, // Added new field
+      allowNull: true, // Adjust according to your needs
+    },
+    agreementCharges: {
+      type: DataTypes.STRING, // Added new field
+      allowNull: true, // Adjust according to your needs
+    }
+  });
 
-    return AddProperty;
+  return AddProperty;
 };

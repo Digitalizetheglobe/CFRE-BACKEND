@@ -18,19 +18,19 @@ module.exports = {
         allowNull: false,
       },
       buArea: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.STRING, // Changed to STRING to allow both numbers and characters
         allowNull: false,
       },
       carpetArea: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.STRING, // Changed to STRING to allow both numbers and characters
         allowNull: false,
       },
       rate: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.STRING, // Changed to STRING to allow both numbers and characters
         allowNull: false,
       },
       cost: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.STRING, // Changed to STRING to allow both numbers and characters
         allowNull: false,
       },
       furnishing: {
@@ -50,23 +50,23 @@ module.exports = {
         allowNull: false,
       },
       ws: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING, // Changed to STRING to allow both numbers and characters
         allowNull: false,
       },
       cabin: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING, // Changed to STRING to allow both numbers and characters
         allowNull: false,
       },
       conferenceOrMeetingRoom: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING, // Changed to STRING to allow both numbers and characters
         allowNull: false,
       },
       carParking: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING, // Changed to STRING to allow both numbers and characters
         allowNull: false,
       },
       bikeParking: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING, // Changed to STRING to allow both numbers and characters
         allowNull: false,
       },
       dgBackup: {
@@ -80,6 +80,50 @@ module.exports = {
       bannerImage: {
         type: Sequelize.STRING,
         allowNull: true,
+      },
+      unitNo: {
+        type: Sequelize.STRING, // Added new field
+        allowNull: true, // Adjust according to your needs
+      },
+      floor: {
+        type: Sequelize.STRING, // Added new field
+        allowNull: true, // Adjust according to your needs
+      },
+      workstation: {
+        type: Sequelize.STRING, // Added new field
+        allowNull: true, // Adjust according to your needs
+      },
+      anyOtherFurniture: {
+        type: Sequelize.STRING, // Added new field
+        allowNull: true, // Adjust according to your needs
+      },
+      rentPerSqFt: {
+        type: Sequelize.STRING, // Added new field
+        allowNull: true, // Adjust according to your needs
+      },
+      maintenancePerSqFt: {
+        type: Sequelize.STRING, // Added new field
+        allowNull: true, // Adjust according to your needs
+      },
+      deposit: {
+        type: Sequelize.STRING, // Added new field
+        allowNull: true, // Adjust according to your needs
+      },
+      yearlyEscalation: {
+        type: Sequelize.STRING, // Added new field
+        allowNull: true, // Adjust according to your needs
+      },
+      agreementPeriod: {
+        type: Sequelize.STRING, // Added new field
+        allowNull: true, // Adjust according to your needs
+      },
+      lockInPeriod: {
+        type: Sequelize.STRING, // Added new field
+        allowNull: true, // Adjust according to your needs
+      },
+      agreementCharges: {
+        type: Sequelize.STRING, // Added new field
+        allowNull: true, // Adjust according to your needs
       },
       createdAt: {
         allowNull: false,
