@@ -88,11 +88,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING, // Added new field
       allowNull: true, // Adjust according to your needs
     },
-    rentPerSqFt: {
-      type: DataTypes.STRING, // Added new field
-      allowNull: true, // Adjust according to your needs
-    },
-    maintenancePerSqFt: {
+    rentPerSqFtBuiltUpArea: {
+      type: DataTypes.STRING, // or the appropriate data type
+      allowNull: true, // depending on your requirements
+    },    
+    maintenancePerSqFtBuiltUpArea: {
       type: DataTypes.STRING, // Added new field
       allowNull: true, // Adjust according to your needs
     },
