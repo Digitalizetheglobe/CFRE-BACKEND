@@ -167,7 +167,7 @@ router.post('/investproperties', upload.single('bannerImage'), async (req, res) 
 });
 
 
-// Route to create a new Sale Property with image upload USING RIGHT NOW
+// Route to create a new property in SaleProperties with image upload
 router.post('/investproperties', upload.single('bannerImage'), async (req, res) => {
   try {
     const bannerImage = req.file ? req.file.path : null;
@@ -190,7 +190,8 @@ router.get('/investproperties', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Route to get a single Sale Property by ID USING RIGHT NOW
+
+// Route to get a single Sale Property by ID
 router.get('/investproperties/:id', async (req, res) => {
   try {
     const property = await SaleProperty.findByPk(req.params.id);
@@ -203,6 +204,7 @@ router.get('/investproperties/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 
 

@@ -1,95 +1,134 @@
 module.exports = (sequelize, DataTypes) => {
-    const SaleProperty = sequelize.define('SaleProperty', {
-      buildingName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      propertyType: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      aboutProperty: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-      },
-      unitNo: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      floor: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      location: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      city: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      furnishing: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      builtUpArea: {
-        type: DataTypes.FLOAT,
-        allowNull: true,
-      },
-      carpetArea: {
-        type: DataTypes.FLOAT,
-        allowNull: true,
-      },
-      reservedCarParking: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      reserved2WheelerParking: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      dgBackup: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-      },
-      cafeteria: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-      },
-      workstation: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      amenities: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-      },
-      cabin: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      conferenceRoom: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      anyOtherFurniture: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-      },
-      ratePerSqFt: {
-        type: DataTypes.FLOAT,
-        allowNull: true,
-      },
-      basicPrice: {
-        type: DataTypes.FLOAT,
-        allowNull: true,
-      },
-      governmentTaxes: {
-        type: DataTypes.FLOAT,
-        allowNull: true,
-      },
-    });
-  
-    return SaleProperty;
-  };
-  
+  const SaleProperty = sequelize.define('SaleProperty', {
+    buildingName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    propertyType: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    buArea: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    carpetArea: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    rate: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    cost: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    furnishing: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    purpose: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    ws: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    cabin: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    conferenceOrMeetingRoom: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    carParking: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    bikeParking: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    dgBackup: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    cafeteria: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    bannerImage: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    ratePerSqFt: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    basicPrice: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    governmentTaxes: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    agreementPeriod: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    lockingPeriod: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    rentStartFrom: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    rentPerMonthRsPerSqFt: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    deposit: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    yearlyEscalation: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    maintenance: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    propertyTax: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    gstOnRent: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    price: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    furnitureDoneBy: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    }
+  });
+
+  return SaleProperty;
+};

@@ -1,9 +1,8 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('SaleProperty', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('SaleProperties', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -18,17 +17,29 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      aboutProperty: {
-        type: Sequelize.TEXT,
-        allowNull: true,
-      },
-      unitNo: {
+      buArea: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
       },
-      floor: {
+      carpetArea: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
+      },
+      rate: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      cost: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      furnishing: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      purpose: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       location: {
         type: Sequelize.STRING,
@@ -38,64 +49,92 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      furnishing: {
+      ws: {
         type: Sequelize.STRING,
-        allowNull: true,
-      },
-      builtUpArea: {
-        type: Sequelize.FLOAT,
-        allowNull: true,
-      },
-      carpetArea: {
-        type: Sequelize.FLOAT,
-        allowNull: true,
-      },
-      reservedCarParking: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      reserved2WheelerParking: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      dgBackup: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      cafeteria: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      workstation: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      amenities: {
-        type: Sequelize.TEXT,
-        allowNull: true,
+        allowNull: false,
       },
       cabin: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
+        type: Sequelize.STRING,
+        allowNull: false,
       },
-      conferenceRoom: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
+      conferenceOrMeetingRoom: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
-      anyOtherFurniture: {
-        type: Sequelize.TEXT,
+      carParking: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      bikeParking: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      dgBackup: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      cafeteria: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      bannerImage: {
+        type: Sequelize.STRING,
         allowNull: true,
       },
       ratePerSqFt: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.STRING,
         allowNull: true,
       },
       basicPrice: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.STRING,
         allowNull: true,
       },
       governmentTaxes: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      agreementPeriod: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      lockingPeriod: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      rentStartFrom: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      rentPerMonthRsPerSqFt: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      deposit: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      yearlyEscalation: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      maintenance: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      propertyTax: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      gstOnRent: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      price: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      furnitureDoneBy: {
+        type: Sequelize.STRING,
         allowNull: true,
       },
       createdAt: {
@@ -109,7 +148,7 @@ module.exports = {
     });
   },
 
-  async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('SaleProperty');
-  }
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('SaleProperties');
+  },
 };
