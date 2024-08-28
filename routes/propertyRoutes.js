@@ -71,7 +71,7 @@ router.get('/projects', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch projects' });
   }
 });
-
+    
 // Get a specific Project by ID
 router.get('/projects/:id', async (req, res) => {
   try {
@@ -118,7 +118,7 @@ router.delete('/projects/:id', async (req, res) => {
 
 
 // Route to create a new Sale Property with image upload
-router.post('/investproperty', upload.single('bannerImage'), async (req, res) => {
+router.post('/investproperties', upload.single('bannerImage'), async (req, res) => {
   try {
     const bannerImage = req.file ? req.file.path : null;
     const saleProperty = await SaleProperty.create({
@@ -133,7 +133,7 @@ router.post('/investproperty', upload.single('bannerImage'), async (req, res) =>
 
 
 // Route to create a new Sale Property with image upload
-router.post('/investproperty', upload.single('bannerImage'), async (req, res) => {
+router.post('/investproperties', upload.single('bannerImage'), async (req, res) => {
   try {
     const bannerImage = req.file ? req.file.path : null;
     const property = await SaleProperty.create({
@@ -147,7 +147,7 @@ router.post('/investproperty', upload.single('bannerImage'), async (req, res) =>
 });
 
 // Route to get all Sale Properties
-router.get('/investproperty', async (req, res) => {
+router.get('/investproperties', async (req, res) => {
   try {
     const properties = await SaleProperty.findAll();
     res.status(200).json(properties);
@@ -157,7 +157,7 @@ router.get('/investproperty', async (req, res) => {
 });
 // Route to update a Sale Property by ID
 // Route to get a single Sale Property by ID
-router.get('/investproperty/:id', async (req, res) => {
+router.get('/investproperties/:id', async (req, res) => {
   try {
     const property = await SaleProperty.findByPk(req.params.id);
     if (property) {
