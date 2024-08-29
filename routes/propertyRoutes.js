@@ -12,6 +12,7 @@ const { Project } = require('../models')
 // const {ContactForm} = require('../models');
 const { ContactForm } = require('../models'); 
 const {ShowroomProperty }= require('../models');
+const { CfreProperty } = require ('../models');
 
 // Configure Multer storage
 const storage = multer.diskStorage({
@@ -25,6 +26,38 @@ const storage = multer.diskStorage({
 
 // Initialize the upload middleware
 const upload = multer({ storage: storage });
+
+
+
+
+router.post('/cfreproperties', upload.single('propertyImage'), async (req, res) => {
+  try {
+    const propertyImage = req.file ? req.file.path : null;
+    const cfreProperty = await CfreProperty.create({
+      ...req.body,
+      propertyImage: propertyImage,
+    });
+    res.status(201).json(cfreProperty);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/cfreproperties', async (req, res) => {
+  try {
+    const properties = await CfreProperty.findAll();
+    res.status(200).json(properties);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
+
+
+
+
 
 
 
@@ -547,10 +580,10 @@ router.get('/combinedproperties', async (req, res) => {
     // Fetch data from rentproperties (AddProperty)
     const rentProperties = await AddProperty.findAll();
 
-    // Combine the results into one array
+    // Combine the results into one array with unique IDs
     const combinedProperties = [
-      ...investProperties.map(property => ({ ...property.toJSON(), type: 'invest' })),
-      ...rentProperties.map(property => ({ ...property.toJSON(), type: 'rent' }))
+      ...investProperties.map(property => ({ ...property.toJSON(), id: `invest-${property.id}`, type: 'invest' })),
+      ...rentProperties.map(property => ({ ...property.toJSON(), id: `rent-${property.id}`, type: 'rent' }))
     ];
 
     // Return the combined data as the response
@@ -559,6 +592,7 @@ router.get('/combinedproperties', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch combined properties', details: error.message });
   }
 });
+
 
 module.exports = router;
 
