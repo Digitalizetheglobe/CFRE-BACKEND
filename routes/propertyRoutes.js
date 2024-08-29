@@ -30,7 +30,7 @@ const upload = multer({ storage: storage });
 
 
 
-router.post('v1/cfreproperties', upload.single('propertyImage'), async (req, res) => {
+router.post('/cfreproperties', upload.single('propertyImage'), async (req, res) => {
   try {
     const propertyImage = req.file ? req.file.path : null;
     const cfreProperty = await CfreProperty.create({
@@ -43,7 +43,7 @@ router.post('v1/cfreproperties', upload.single('propertyImage'), async (req, res
   }
 });
 
-router.get('v1/cfreproperties', async (req, res) => {
+router.get('/cfreproperties', async (req, res) => {
   try {
     const properties = await CfreProperty.findAll();
     res.status(200).json(properties);
