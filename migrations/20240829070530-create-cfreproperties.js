@@ -102,9 +102,6 @@ module.exports = {
       gstOnRent: {
         type: Sequelize.STRING,
       },
-      amenities: {
-        type: Sequelize.STRING,
-      },
       basePrice: {
         type: Sequelize.STRING,
       },
