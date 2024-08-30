@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       agreementCharges: DataTypes.STRING,
       propertyTax: DataTypes.STRING,
       gstOnRent: DataTypes.STRING,
+      amenities: DataTypes.STRING,
       basePrice: DataTypes.STRING,
       govermentTaxes: DataTypes.STRING,
       seoTitle: DataTypes.STRING,

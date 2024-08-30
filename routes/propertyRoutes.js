@@ -53,6 +53,48 @@ router.get('/cfreproperties', async (req, res) => {
 });
 
 
+router.delete('/cfreproperties/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await CfreProperty.destroy({ where: { id } });
+    if (deleted) {
+      res.status(204).send("Property deleted");
+    } else {
+      res.status(404).json({ error: "Property not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
+router.put('/cfreproperties/:id', upload.single('propertyImage'), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const propertyImage = req.file ? req.file.path : req.body.propertyImage; // Check if new image uploaded or keep existing
+    const [updated] = await CfreProperty.update(
+      {
+        ...req.body,
+        propertyImage: propertyImage,
+      },
+      {
+        where: { id },
+      }
+    );
+    if (updated) {
+      const updatedProperty = await CfreProperty.findOne({ where: { id } });
+      res.status(200).json(updatedProperty);
+    } else {
+      res.status(404).json({ error: "Property not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
 
 
 
