@@ -24,7 +24,6 @@ const storage = multer.diskStorage({
   }
 });
 
-// Initialize the upload middleware
 const upload = multer({ storage: storage });
 
 

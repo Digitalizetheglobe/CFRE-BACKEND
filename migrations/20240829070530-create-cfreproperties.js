@@ -120,6 +120,12 @@ module.exports = {
       slug: {
         type: Sequelize.STRING,
       },
+      availableFor: {
+        type: Sequelize.STRING, // New field
+      },
+      amenities: {
+        type: Sequelize.STRING, // New field
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
