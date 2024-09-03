@@ -1,6 +1,6 @@
 // models/ContactForm.js
 module.exports = (sequelize, DataTypes) => {
-    const ContactForm = sequelize.define('ContactForm', {
+    const ContactForm = sequelize.define ('ContactForm', {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
