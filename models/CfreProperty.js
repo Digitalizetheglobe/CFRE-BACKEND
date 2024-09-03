@@ -38,8 +38,11 @@ module.exports = (sequelize, DataTypes) => {
     seoDiscription: DataTypes.STRING,
     seoKeywords: DataTypes.STRING,
     slug: DataTypes.STRING,
-    availableFor: DataTypes.STRING, // New field
-    amenities: DataTypes.STRING,    // New field
+    availableFor: DataTypes.STRING, 
+    amenities: DataTypes.STRING,    
+    rentPerMonth: DataTypes.STRING,
+    aboutProperty: DataTypes.TEXT,
+
   });
 
   return CfreProperty;
