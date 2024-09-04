@@ -37,7 +37,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Bulk Upload Route
+// Bulk Upload Route this api use for propety bulk upload
 router.post('/cfreproperties/bulk-upload', upload.single('file'), async (req, res) => {
   try {
       const file = req.file;
