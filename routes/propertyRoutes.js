@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+const csv = require('csv-parser');
+const XLSX = require('xlsx');
 const { CommercialPropertyForRent, CommercialPropertyForSale } = require('../models');
 const { PreleaseProperty } = require('../models');
 const { PropertyInquiry } = require('../models');
@@ -14,10 +17,18 @@ const { ContactForm } = require('../models');
 const {ShowroomProperty }= require('../models');
 const { CfreProperty } = require ('../models');
 
+// Directory where files will be uploaded
+const uploadDir = 'uploads';
+
+// Create the directory if it doesn't exist
+if (!fs.existsSync(uploadDir)){
+    fs.mkdirSync(uploadDir);
+}
+
 // Configure Multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -26,7 +37,54 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// Bulk Upload Route
+router.post('/cfreproperties/bulk-upload', upload.single('file'), async (req, res) => {
+  try {
+      const file = req.file;
+      if (!file) {
+          return res.status(400).json({ error: 'No file uploaded' });
+      }
 
+      const filePath = path.join(__dirname, '..', 'uploads', file.filename);
+      const fileExtension = path.extname(file.originalname).toLowerCase();
+
+      let properties = [];
+
+      if (fileExtension === '.csv') {
+          // Parse CSV file
+          fs.createReadStream(filePath)
+              .pipe(csv())
+              .on('data', (row) => properties.push(row))
+              .on('end', async () => {
+                  try {
+                      await CfreProperty.bulkCreate(properties);
+                      fs.unlinkSync(filePath); // Remove the file after processing
+                      res.status(201).json({ message: 'Properties uploaded successfully' });
+                  } catch (error) {
+                      res.status(500).json({ error: error.message });
+                  }
+              });
+      } else if (fileExtension === '.xlsx') {
+          // Parse Excel file
+          try {
+              const workbook = XLSX.readFile(filePath);
+              const sheetName = workbook.SheetNames[0]; // Assumes the first sheet
+              const sheet = workbook.Sheets[sheetName];
+              properties = XLSX.utils.sheet_to_json(sheet);
+
+              await CfreProperty.bulkCreate(properties);
+              fs.unlinkSync(filePath); // Remove the file after processing
+              res.status(201).json({ message: 'Properties uploaded successfully' });
+          } catch (error) {
+              res.status(500).json({ error: error.message });
+          }
+      } else {
+          res.status(400).json({ error: 'Unsupported file type' });
+      }
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
 
 
 router.post('/cfreproperties', upload.single('propertyImage'), async (req, res) => {
@@ -86,19 +144,21 @@ router.delete('/cfreproperties/:id', async (req, res) => {
 
 
 
+// Update a specific CfreProperty by ID
 router.put('/cfreproperties/:id', upload.single('propertyImage'), async (req, res) => {
   try {
     const { id } = req.params;
-    const propertyImage = req.file ? req.file.path : req.body.propertyImage; // Check if new image uploaded or keep existing
+    const propertyImage = req.file ? req.file.path : req.body.propertyImage; // Check if a new image was uploaded or keep the existing one
     const [updated] = await CfreProperty.update(
       {
         ...req.body,
-        propertyImage: propertyImage,
+        propertyImage: propertyImage, // Update with new image if provided
       },
       {
         where: { id },
       }
     );
+
     if (updated) {
       const updatedProperty = await CfreProperty.findOne({ where: { id } });
       res.status(200).json(updatedProperty);
@@ -109,6 +169,7 @@ router.put('/cfreproperties/:id', upload.single('propertyImage'), async (req, re
     res.status(500).json({ error: error.message });
   }
 });
+
 
 
 
