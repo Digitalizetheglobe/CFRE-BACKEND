@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require ('express');
 const cors = require('cors');
 const app = express();
 const propertyRoutes = require('./routes/propertyRoutes');
@@ -11,6 +11,7 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
+//sudo nano /etc/nginx/sites-available/cfrerealty.com
 
 app.use(cors(corsOptions));
 app.use(express.json());
