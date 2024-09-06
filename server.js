@@ -23,7 +23,7 @@ app.use('/', propertyRoutes);
 // app.use('/api/conatct',contactForm )
 
 // lis 8080 for Production server for Local Use 8001
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
  //port 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
