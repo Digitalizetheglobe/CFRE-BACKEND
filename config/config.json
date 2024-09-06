@@ -13,13 +13,11 @@
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
-"production": {
-  "username": "new_cfre_user",
-  "password": "Str0ng_P@ssw0rd!",
-  "database": "cfre_main",
-  "host": "127.0.0.1",
-  "dialect": "mysql"
-}
-
-
+  "production": {
+    "username": "new_cfre_user",
+    "password": "Str0ng_P@ssw0rd!",
+    "database": "cfre_main",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
 }
