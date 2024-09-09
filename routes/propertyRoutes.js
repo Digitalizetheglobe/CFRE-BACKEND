@@ -172,20 +172,6 @@ router.put('/cfreproperties/:id', upload.single('propertyImage'), async (req, re
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // POST route to create a showroom property USING RIGHT NOW
 router.post('/showroomproperty', async (req, res) => {
   try {
