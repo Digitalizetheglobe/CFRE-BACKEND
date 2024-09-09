@@ -1,15 +1,15 @@
 const { Sequelize } = require('sequelize');
-const config = require('./config/config.json');
 
-const sequelize = new Sequelize(config.production.database, config.production.username, config.production.password, {
-  host: config.production.host,
-  dialect: config.production.dialect,
+const sequelize = new Sequelize('cfre_main', 'new_cfre_user', 'Str0ng_P@ssw0rd!', {
+  host: '127.0.0.1',
+  dialect: 'mysql'
 });
 
-sequelize.authenticate()
-  .then(() => {
+(async () => {
+  try {
+    await sequelize.authenticate();
     console.log('Connection has been established successfully.');
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+})();
