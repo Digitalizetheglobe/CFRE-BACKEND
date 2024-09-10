@@ -1,9 +1,11 @@
-const express = require  ('express');
+const express = require('express');
 const cors = require('cors');
 const app = express();
 const propertyRoutes = require('./routes/propertyRoutes');
-// const contactForm = require ('./routes/contactForm')
-// const projectRoutes = require ('./routes/projectRoutes')
+const adminRoutes = require('./routes/admin'); // Include the admin routes
+
+// const contactForm = require('./routes/contactForm');
+// const projectRoutes = require('./routes/projectRoutes');
 
 // Configure CORS
 const corsOptions = {
@@ -11,21 +13,25 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
-//sudo nano /etc/nginx/sites-available/cfrerealty.com
 
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
 // Use the property routes
-app.use('/', propertyRoutes); 
+app.use('/', propertyRoutes);
+
+// Admin registration and login routes
+app.use('/admin', adminRoutes);
+
+// Uncomment these when you have routes for contact and project
 // app.use('/project', projectRoutes);
-// app.use('/api/conatct',contactForm )
+// app.use('/api/contact', contactForm);
 
-// lis 8080 for Production server for Local Use 8001
-const PORT = process.env.PORT || 8085; // Change to a different port
+// Listen on 8085 for production, or use 8001 for local development
+const PORT = process.env.PORT || 8085; 
 
- //port a
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
