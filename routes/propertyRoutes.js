@@ -199,7 +199,7 @@ router.get('/showroomproperty', async (req, res) => {
 
 
 // POST route for the contact form USING RIGHT NOW
-router.post('contactform/', async (req, res) => {
+router.post('/contactform', async (req, res) => {
   try {
     console.log('Request Body:', req.body);
     const contactform = await ContactForm.create(req.body);
