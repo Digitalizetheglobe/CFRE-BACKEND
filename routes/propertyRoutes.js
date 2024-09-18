@@ -87,12 +87,15 @@ router.post('/cfreproperties/bulk-upload', upload.single('file'), async (req, re
 });
 
 
-router.post('/cfreproperties', upload.single('propertyImage'), async (req, res) => {
+// Add a property with multiple images
+router.post('/cfreproperties', upload.array('multiplePropertyImages', 10), async (req, res) => {
+  console.log('Files received:', req.files); // Debugging line
+  console.log('Form data received:', req.body); // Debugging line
   try {
-    const propertyImage = req.file ? req.file.path : null;
+    const multiplePropertyImages = req.files ? req.files.map(file => file.path) : [];
     const cfreProperty = await CfreProperty.create({
       ...req.body,
-      propertyImage: propertyImage,
+      multiplePropertyImages: multiplePropertyImages, // Save array of image paths
     });
     res.status(201).json(cfreProperty);
   } catch (error) {

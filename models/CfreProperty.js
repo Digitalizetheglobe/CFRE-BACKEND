@@ -42,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     amenities: DataTypes.STRING,    
     rentPerMonth: DataTypes.STRING,
     aboutProperty: DataTypes.TEXT,
+    multiplePropertyImages: DataTypes.JSON,
 
   });
 
