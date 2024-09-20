@@ -114,6 +114,24 @@ router.post('/cfreproperties/bulk-delete', async (req, res) => {
   }
 });
 
+router.post('/cfreproperties/delete-all', async (req, res) => {
+  try {
+    // Delete all records in the CfreProperty table
+    const deletedCount = await CfreProperty.destroy({
+      where: {}, // No conditions, this will delete everything in the table
+      truncate: true // Optional: This will reset the auto-increment counter for the table
+    });
+
+    if (deletedCount > 0) {
+      res.status(200).json({ message: `All properties deleted successfully` });
+    } else {
+      res.status(404).json({ error: 'No properties found to delete' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 // Add a property with multiple images
 router.post('/cfreproperties', upload.array('multiplePropertyImages', 10), async (req, res) => {
