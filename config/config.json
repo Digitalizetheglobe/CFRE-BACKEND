@@ -4,7 +4,9 @@
     "password": "root",
     "database": "cfre_main",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "gmailUser": "waghmareadarsh1432@gmail.com",
+    "gmailPass": "Adarsh@123"
   },
   "test": {
     "username": "root",

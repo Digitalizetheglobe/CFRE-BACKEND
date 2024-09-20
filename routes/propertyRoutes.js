@@ -16,6 +16,7 @@ const { Project } = require('../models')
 const { ContactForm } = require('../models'); 
 const {ShowroomProperty }= require('../models');
 const { CfreProperty } = require ('../models');
+const {sendContactFormEmail} = require('../mailer')
 
 // Directory where files will be uploaded
 const uploadDir = 'uploads';
@@ -83,6 +84,33 @@ router.post('/cfreproperties/bulk-upload', upload.single('file'), async (req, re
       }
   } catch (error) {
       res.status(500).json({ error: error.message });
+  }
+});
+
+
+router.post('/cfreproperties/bulk-delete', async (req, res) => {
+  try {
+    // Expect an array of IDs to be sent in the request body for deletion
+    const { propertyIds } = req.body; 
+
+    if (!propertyIds || !Array.isArray(propertyIds)) {
+      return res.status(400).json({ error: 'Invalid or missing propertyIds array' });
+    }
+
+    // Perform bulk delete based on propertyIds
+    const deletedCount = await CfreProperty.destroy({
+      where: {
+        id: propertyIds, // Assumes 'id' is the primary key field
+      },
+    });
+
+    if (deletedCount > 0) {
+      res.status(200).json({ message: `${deletedCount} properties deleted successfully` });
+    } else {
+      res.status(404).json({ error: 'No properties found with the provided IDs' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -206,6 +234,9 @@ router.post('/contactform', async (req, res) => {
   try {
     console.log('Request Body:', req.body);
     const contactform = await ContactForm.create(req.body);
+
+     // Send email with the contact form details
+     await sendContactFormEmail(req.body);
     res.status(201).json(contactform);
   } catch (error) {
     console.error('Error creating contact form:', error);
