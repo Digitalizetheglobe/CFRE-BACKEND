@@ -160,20 +160,20 @@ router.get('/cfreproperties', async (req, res) => {
 
 
 // Get a specific CfreProperty by ID
-// router.get('/cfreproperties/:id', async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const property = await CfreProperty.findOne({ where: { id } });
+router.get('/cfreproperties/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const property = await CfreProperty.findOne({ where: { id } });
 
-//     if (property) {
-//       res.status(200).json(property);
-//     } else {
-//       res.status(404).json({ error: "Property not found" });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
+    if (property) {
+      res.status(200).json(property);
+    } else {
+      res.status(404).json({ error: "Property not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Get a specific CfreProperty by slug
 router.get('/cfreproperties/:slug', async (req, res) => {
