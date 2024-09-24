@@ -25,16 +25,17 @@ if (!fs.existsSync(uploadDir)){
     fs.mkdirSync(uploadDir);
 }
 
-// Configure Multer storage
+// Configure Multer storage for multiple images
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadDir);
+      cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+      cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
+// Allow uploading multiple images
 const upload = multer({ storage: storage });
 
 // Bulk Upload Route this api use for propety bulk upload
@@ -87,16 +88,20 @@ router.post('/cfreproperties/bulk-upload', upload.single('file'), async (req, re
 });
 
 
-router.post('/cfreproperties', upload.single('propertyImage'), async (req, res) => {
+// Updated route to handle multiple image uploads for CfreProperty
+router.post('/cfreproperties', upload.array('propertyImages', 10), async (req, res) => {
   try {
-    const propertyImage = req.file ? req.file.path : null;
-    const cfreProperty = await CfreProperty.create({
-      ...req.body,
-      propertyImage: propertyImage,
-    });
-    res.status(201).json(cfreProperty);
+      // Check if files were uploaded
+      const propertyImages = req.files ? req.files.map(file => file.path) : [];
+
+      const cfreProperty = await CfreProperty.create({
+          ...req.body,
+          propertyImages: JSON.stringify(propertyImages), // Store image paths as JSON array
+      });
+
+      res.status(201).json(cfreProperty);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
   }
 });
 
@@ -111,20 +116,44 @@ router.get('/cfreproperties', async (req, res) => {
 
 
 // Get a specific CfreProperty by ID
-router.get('/cfreproperties/:id', async (req, res) => {
+//  router.get('/cfreproperties/:id', async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const property = await CfreProperty.findOne({ where: { id } });
+
+//     if (property) {
+//       res.status(200).json(property);
+//     } else {
+//       res.status(404).json({ error: "Property not found" });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+
+
+// Get a specific CfreProperty by slug
+router.get('/cfreproperties/:slug', async (req, res) => {
   try {
-    const { id } = req.params;
-    const property = await CfreProperty.findOne({ where: { id } });
+    const { slug } = req.params;
+
+    // Fetch the property from the database using the slug
+    const property = await CfreProperty.findOne({ where: { slug } });
 
     if (property) {
-      res.status(200).json(property);
+      // Return the property if found
+      return res.status(200).json(property);
     } else {
-      res.status(404).json({ error: "Property not found" });
+      // Return a 404 if the property is not found
+      return res.status(404).json({ error: "Property not found" });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    // Catch any internal server errors and return a 500 status
+    console.error("Error fetching property by slug:", error.message);
+    return res.status(500).json({ error: "An error occurred while retrieving the property" });
   }
 });
+
 
 
 
@@ -144,32 +173,34 @@ router.delete('/cfreproperties/:id', async (req, res) => {
 
 
 
-// Update a specific CfreProperty by ID
-router.put('/cfreproperties/:id', upload.single('propertyImage'), async (req, res) => {
+// Update a specific CfreProperty by ID (with image update support)
+router.put('/cfreproperties/:id', upload.array('propertyImages', 10), async (req, res) => {
   try {
-    const { id } = req.params;
-    const propertyImage = req.file ? req.file.path : req.body.propertyImage; // Check if a new image was uploaded or keep the existing one
-    const [updated] = await CfreProperty.update(
-      {
-        ...req.body,
-        propertyImage: propertyImage, 
-      },
-      {
-        where: { id },
-      }
-    );
+      const { id } = req.params;
 
-    if (updated) {
-      const updatedProperty = await CfreProperty.findOne({ where: { id } });
-      res.status(200).json(updatedProperty);
-    } else {
-      res.status(404).json({ error: "Property not found" });
-    }
+      // Check if new images are uploaded or use existing ones
+      const propertyImages = req.files ? req.files.map(file => file.path) : req.body.propertyImages;
+
+      const [updated] = await CfreProperty.update(
+          {
+              ...req.body,
+              propertyImages: JSON.stringify(propertyImages), // Store image paths as JSON array
+          },
+          {
+              where: { id },
+          }
+      );
+
+      if (updated) {
+          const updatedProperty = await CfreProperty.findOne({ where: { id } });
+          res.status(200).json(updatedProperty);
+      } else {
+          res.status(404).json({ error: "Property not found" });
+      }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
   }
 });
-
 
 
 // POST route to create a showroom property USING RIGHT NOW
