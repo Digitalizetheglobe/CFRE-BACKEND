@@ -199,22 +199,24 @@ router.get('/cfreproperties/:id', async (req, res) => {
 
 router.get('/cfreproperties/:slug', async (req, res) => {
   try {
-      const slug = req.params.slug; // Get the slug from the request parameters
-      console.log("Received slug:", slug); // Log the slug for debugging
-
-      // Query the property by slug
-      const property = await CfreProperty.findOne({ where: { slug } });
+      const slug = req.params.slug;
+      console.log("Received slug:", slug);
+      // Query the database for the slug
+      const property = await CfreProperty.findOne({
+          where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('slug')), slug.toLowerCase())
+      });
 
       if (property) {
-          return res.status(200).json(property); // Return property details
+          res.status(200).json(property);
       } else {
-          return res.status(404).json({ error: "Property not found" }); // Handle not found
+          res.status(404).json({ error: "Property not found" });
       }
   } catch (error) {
-      console.error("Error fetching property by slug:", error); // Log error
-      return res.status(500).json({ error: "An error occurred while retrieving the property" }); // Handle server error
+      console.error("Error fetching property by slug:", error);
+      res.status(500).json({ error: "Server error" });
   }
 });
+
 
 
 
