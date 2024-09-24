@@ -160,20 +160,43 @@ router.get('/cfreproperties', async (req, res) => {
 
 
 // Get a specific CfreProperty by ID
-router.get('/cfreproperties/:id', async (req, res) => {
+// router.get('/cfreproperties/:id', async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const property = await CfreProperty.findOne({ where: { id } });
+
+//     if (property) {
+//       res.status(200).json(property);
+//     } else {
+//       res.status(404).json({ error: "Property not found" });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+
+// Get a specific CfreProperty by slug
+router.get('/cfreproperties/:slug', async (req, res) => {
   try {
-    const { id } = req.params;
-    const property = await CfreProperty.findOne({ where: { id } });
+    const { slug } = req.params;
+
+    // Fetch the property from the database using the slug
+    const property = await CfreProperty.findOne({ where: { slug } });
 
     if (property) {
-      res.status(200).json(property);
+      // Return the property if found
+      return res.status(200).json(property);
     } else {
-      res.status(404).json({ error: "Property not found" });
+      // Return a 404 if the property is not found
+      return res.status(404).json({ error: "Property not found" });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    // Catch any internal server errors and return a 500 status
+    console.error("Error fetching property by slug:", error.message);
+    return res.status(500).json({ error: "An error occurred while retrieving the property" });
   }
 });
+
 
 
 
