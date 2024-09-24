@@ -196,19 +196,23 @@ router.get('/cfreproperties/:id', async (req, res) => {
 //     return res.status(500).json({ error: "An error occurred while retrieving the property" });
 //   }
 // });
+
 router.get('/cfreproperties/:slug', async (req, res) => {
   try {
       const slug = req.params.slug; // Get the slug from the request parameters
+      console.log("Received slug:", slug); // Log the slug for debugging
+
+      // Query the property by slug
       const property = await CfreProperty.findOne({ where: { slug } });
 
       if (property) {
-          return res.status(200).json(property);
+          return res.status(200).json(property); // Return property details
       } else {
-          return res.status(404).json({ error: "Property not found" });
+          return res.status(404).json({ error: "Property not found" }); // Handle not found
       }
   } catch (error) {
-      console.error("Error fetching property by slug:", error);
-      return res.status(500).json({ error: "An error occurred while retrieving the property" });
+      console.error("Error fetching property by slug:", error); // Log error
+      return res.status(500).json({ error: "An error occurred while retrieving the property" }); // Handle server error
   }
 });
 
