@@ -173,29 +173,47 @@ router.get('/cfreproperties/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+}); 
 
 // Get a specific CfreProperty by slug
+// router.get('/cfreproperties/:slug', async (req, res) => {
+//   try {
+//     const { slug } = req.params;
+
+//     // Fetch the property from the database using the slug
+//     const property = await CfreProperty.findOne({ where: { slug } });
+
+//     if (property) {
+//       // Return the property if found
+//       return res.status(200).json(property);
+//     } else {
+//       // Return a 404 if the property is not found
+//       return res.status(404).json({ error: "Property not found" });
+//     }
+//   } catch (error) {
+//     // Catch any internal server errors and return a 500 status
+//     console.error("Error fetching property by slug:", error.message);
+//     return res.status(500).json({ error: "An error occurred while retrieving the property" });
+//   }
+// });
 router.get('/cfreproperties/:slug', async (req, res) => {
   try {
-    const { slug } = req.params;
+    const slug = req.params.slug.replace(/%20/g, ' '); // Replace %20 with space for database match
 
     // Fetch the property from the database using the slug
     const property = await CfreProperty.findOne({ where: { slug } });
 
     if (property) {
-      // Return the property if found
       return res.status(200).json(property);
     } else {
-      // Return a 404 if the property is not found
       return res.status(404).json({ error: "Property not found" });
     }
   } catch (error) {
-    // Catch any internal server errors and return a 500 status
     console.error("Error fetching property by slug:", error.message);
     return res.status(500).json({ error: "An error occurred while retrieving the property" });
   }
 });
+
 
 
 
