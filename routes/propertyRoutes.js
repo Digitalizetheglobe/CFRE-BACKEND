@@ -17,6 +17,7 @@ const { ContactForm } = require('../models');
 const {ShowroomProperty }= require('../models');
 const { CfreProperty } = require ('../models');
 const {sendContactFormEmail} = require('../mailer')
+const { Op } = require('sequelize');
 
 // Directory where files will be uploaded
 const uploadDir = 'uploads';
@@ -201,14 +202,18 @@ router.get('/cfreproperties/:slug', async (req, res) => {
   try {
       const slug = req.params.slug;
       console.log("Received slug:", slug);
-      // Query the database for the slug
+
       const property = await CfreProperty.findOne({
-          where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('slug')), slug.toLowerCase())
+          where: {
+            slug: { [Op.iLike]: slug }
+          }
       });
 
       if (property) {
+          console.log("Found property:", property);
           res.status(200).json(property);
       } else {
+          console.log("Property not found for slug:", slug);
           res.status(404).json({ error: "Property not found" });
       }
   } catch (error) {
