@@ -202,25 +202,26 @@ router.get('/cfreproperties', async (req, res) => {
 
 router.get('/cfreproperties/:slug', async (req, res) => {
   try {
-      const slug = req.params.slug;
-      console.log("Received slug:", slug);
+    const slug = req.params.slug;
+    console.log("Received slug:", slug);
 
-      const property = await CfreProperty.findOne({
-          where: {
-              slug: { [Op.iLike]: slug }  // Query by the slug field, not id
-          }
-      });
-
-      if (property) {
-          console.log("Found property:", property);
-          res.status(200).json(property);
-      } else {
-          console.log("Property not found for slug:", slug);
-          res.status(404).json({ error: "Property not found" });
+    // Use Op.like for MySQL (case-insensitive)
+    const property = await CfreProperty.findOne({
+      where: {
+        slug: { [Op.like]: slug }
       }
+    });
+
+    if (property) {
+      console.log("Found property:", property);
+      res.status(200).json(property);
+    } else {
+      console.log("Property not found for slug:", slug);
+      res.status(404).json({ error: "Property not found" });
+    }
   } catch (error) {
-      console.error("Error fetching property by slug:", error);
-      res.status(500).json({ error: "Server error" });
+    console.error("Error fetching property by slug:", error.message || error);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
