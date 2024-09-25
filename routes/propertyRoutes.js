@@ -205,7 +205,7 @@ router.get('/cfreproperties/:slug', async (req, res) => {
 
       const property = await CfreProperty.findOne({
           where: {
-            slug: { [Op.iLike]: slug }
+              slug: { [Op.iLike]: slug }  // Query by the slug field, not id
           }
       });
 
