@@ -16,7 +16,10 @@ const { Project } = require('../models')
 const { ContactForm } = require('../models'); 
 const {ShowroomProperty }= require('../models');
 const { CfreProperty } = require ('../models');
-const {sendContactFormEmail} = require('../mailer')
+// const {sendContactFormEmail} = require('../mailer');
+const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
+const { sendContactFormEmail } = require('./emailService');
 
 // Directory where files will be uploaded
 const uploadDir = 'uploads';
@@ -274,20 +277,39 @@ router.get('/showroomproperty', async (req, res) => {
 
 
 
+
 // POST route for the contact form USING RIGHT NOW
+
+// Contact form route
+// POST route for the contact form
+// POST route for the contact form
 router.post('/contactform', async (req, res) => {
   try {
     console.log('Request Body:', req.body);
     const contactform = await ContactForm.create(req.body);
 
-     // Send email with the contact form details
-     await sendContactFormEmail(req.body);
+    // Send email with the contact form details
+    await sendContactFormEmail(req.body);
+
     res.status(201).json(contactform);
   } catch (error) {
     console.error('Error creating contact form:', error);
     res.status(500).json({ error: 'Failed to create contact form', details: error.message });
   }
 });
+// router.post('/contactform', async (req, res) => {
+//   try {
+//     console.log('Request Body:', req.body);
+//     const contactform = await ContactForm.create(req.body);
+
+//      // Send email with the contact form details
+//      await sendContactFormEmail(req.body);
+//     res.status(201).json(contactform);
+//   } catch (error) {
+//     console.error('Error creating contact form:', error);
+//     res.status(500).json({ error: 'Failed to create contact form', details: error.message });
+//   }
+// });
 
 // GET route to retrieve all contact forms USING RIGHT NOW
 router.get('/contactforms', async (req, res) => {
