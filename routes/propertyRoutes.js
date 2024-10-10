@@ -16,6 +16,7 @@ const { Project } = require('../models')
 const { ContactForm } = require('../models'); 
 const {ShowroomProperty }= require('../models');
 const { CfreProperty } = require ('../models');
+const {sendContactFormEmail} = require('../mailer')
 
 // Directory where files will be uploaded
 const uploadDir = 'uploads';
@@ -88,18 +89,62 @@ router.post('/cfreproperties/bulk-upload', upload.single('file'), async (req, re
 });
 
 
-// Updated route to handle multiple image uploads for CfreProperty
-router.post('/cfreproperties', upload.array('propertyImages', 10), async (req, res) => {
+router.post('/cfreproperties/bulk-delete', async (req, res) => {
   try {
-      // Check if files were uploaded
-      const propertyImages = req.files ? req.files.map(file => file.path) : [];
+    // Expect an array of IDs to be sent in the request body for deletion
+    const { propertyIds } = req.body; 
 
-      const cfreProperty = await CfreProperty.create({
-          ...req.body,
-          propertyImages: JSON.stringify(propertyImages), // Store image paths as JSON array
-      });
+    if (!propertyIds || !Array.isArray(propertyIds)) {
+      return res.status(400).json({ error: 'Invalid or missing propertyIds array' });
+    }
 
-      res.status(201).json(cfreProperty);
+    // Perform bulk delete based on propertyIds
+    const deletedCount = await CfreProperty.destroy({
+      where: {
+        id: propertyIds, // Assumes 'id' is the primary key field
+      },
+    });
+
+    if (deletedCount > 0) {
+      res.status(200).json({ message: `${deletedCount} properties deleted successfully` });
+    } else {
+      res.status(404).json({ error: 'No properties found with the provided IDs' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/cfreproperties/delete-all', async (req, res) => {
+  try {
+    // Delete all records in the CfreProperty table
+    const deletedCount = await CfreProperty.destroy({
+      where: {}, // No conditions, this will delete everything in the table
+      truncate: true // Optional: This will reset the auto-increment counter for the table
+    });
+
+    if (deletedCount > 0) {
+      res.status(200).json({ message: `All properties deleted successfully` });
+    } else {
+      res.status(404).json({ error: 'No properties found to delete' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+// Add a property with multiple images
+router.post('/cfreproperties', upload.array('multiplePropertyImages', 10), async (req, res) => {
+  console.log('Files received:', req.files); // Debugging line
+  console.log('Form data received:', req.body); // Debugging line
+  try {
+    const multiplePropertyImages = req.files ? req.files.map(file => file.path) : [];
+    const cfreProperty = await CfreProperty.create({
+      ...req.body,
+      multiplePropertyImages: multiplePropertyImages, // Save array of image paths
+    });
+    res.status(201).json(cfreProperty);
   } catch (error) {
       res.status(500).json({ error: error.message });
   }
@@ -234,6 +279,9 @@ router.post('/contactform', async (req, res) => {
   try {
     console.log('Request Body:', req.body);
     const contactform = await ContactForm.create(req.body);
+
+     // Send email with the contact form details
+     await sendContactFormEmail(req.body);
     res.status(201).json(contactform);
   } catch (error) {
     console.error('Error creating contact form:', error);

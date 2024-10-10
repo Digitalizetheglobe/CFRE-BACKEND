@@ -67,7 +67,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       propertyImage: {
-        type: Sequelize.STRING,
+        type: Sequelize.JSON,
       },
       agreementPeriod: {
         type: Sequelize.STRING,
