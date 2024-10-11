@@ -29,7 +29,7 @@ app.use('/admin', adminRoutes);
 // app.use('/api/contact', contactForm);
 
 // Listen on 8085 for production, or use 8001 for local development
-const PORT = process.env.PORT || 8001; 
+const PORT = process.env.PORT || 8085; 
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
