@@ -201,17 +201,17 @@ router.get('/cfreproperties', async (req, res) => {
 //   }
 // });
 
-router.get('/cfreproperties/:slug', async (req, res) => {
-  try {
-    const slug = req.params.slug;
-    console.log("Received slug:", slug);
+// router.get('/cfreproperties/:slug', async (req, res) => {
+//   try {
+//     const slug = req.params.slug;
+//     console.log("Received slug:", slug);
 
-    // Use Op.like for MySQL (case-insensitive)
-    const property = await CfreProperty.findOne({
-      where: {
-        slug: { [Op.like]: slug }
-      }
-    });
+//     // Use Op.like for MySQL (case-insensitive)
+//     const property = await CfreProperty.findOne({
+//       where: {
+//         slug: { [Op.like]: slug }
+//       }
+//     });
 
 //     if (property) {
 //       res.status(200).json(property);
