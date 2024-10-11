@@ -15,7 +15,7 @@ async function sendContactFormEmail(formData) {
     const mailOptions = {
       from: formData.email,
      //  to: 'cfrerealty@gmail.com',
-    to:  ['cfrerealty@gmail.com', 'leads.dtg@gmail.com'],
+    to:  ['cfrerealty@gmail.com'],
       subject: 'New Contact Form Submission from cfrerealty',
       text: `You have received a new contact form submission:\n
              Name: ${formData.name}\n

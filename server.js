@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const propertyRoutes = require('./routes/propertyRoutes');
-const adminRoutes = require('./routes/admin'); // Include the admin routes
+const adminRoutes = require('./routes/admin'); 
+const listYourPropertyRoute = require('./routes/listyourproperty');
 
 // const contactForm = require('./routes/contactForm');
 // const projectRoutes = require('./routes/projectRoutes');
@@ -27,6 +28,9 @@ app.use('/admin', adminRoutes);
 // Uncomment these when you have routes for contact and project
 // app.use('/project', projectRoutes);
 // app.use('/api/contact', contactForm);
+
+// Include the new route
+app.use('/api/listyourproperty', listYourPropertyRoute);
 
 // Listen on 8085 for production, or use 8001 for local development
 const PORT = process.env.PORT || 8085; 
