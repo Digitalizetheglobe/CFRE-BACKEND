@@ -16,10 +16,8 @@ const { Project } = require('../models')
 const { ContactForm } = require('../models'); 
 const {ShowroomProperty }= require('../models');
 const { CfreProperty } = require ('../models');
-// const {sendContactFormEmail} = require('../mailer');
-const nodemailer = require('nodemailer');
-const bodyParser = require('body-parser');
-const { sendContactFormEmail } = require('./emailService');
+const {sendContactFormEmail} = require('../mailer')
+const { Op } = require('sequelize');
 
 // Directory where files will be uploaded
 const uploadDir = 'uploads';
@@ -164,10 +162,56 @@ router.get('/cfreproperties', async (req, res) => {
 
 
 // Get a specific CfreProperty by ID
-//  router.get('/cfreproperties/:id', async (req, res) => {
+
+//latest change
+// //  router.get('/cfreproperties/:id', async (req, res) => {
+// //   try {
+// //     const { id } = req.params;
+// //     const property = await CfreProperty.findOne({ where: { id } });
+
+//     if (property) {
+//       res.status(200).json(property);
+//     } else {
+//       res.status(404).json({ error: "Property not found" });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// }); 
+
+// Get a specific CfreProperty by slug
+// router.get('/cfreproperties/:slug', async (req, res) => {
 //   try {
-//     const { id } = req.params;
-//     const property = await CfreProperty.findOne({ where: { id } });
+//     const { slug } = req.params;
+
+//     // Fetch the property from the database using the slug
+//     const property = await CfreProperty.findOne({ where: { slug } });
+
+//     if (property) {
+//       // Return the property if found
+//       return res.status(200).json(property);
+//     } else {
+//       // Return a 404 if the property is not found
+//       return res.status(404).json({ error: "Property not found" });
+//     }
+//   } catch (error) {
+//     // Catch any internal server errors and return a 500 status
+//     console.error("Error fetching property by slug:", error.message);
+//     return res.status(500).json({ error: "An error occurred while retrieving the property" });
+//   }
+// });
+
+router.get('/cfreproperties/:slug', async (req, res) => {
+  try {
+    const slug = req.params.slug;
+    console.log("Received slug:", slug);
+
+    // Use Op.like for MySQL (case-insensitive)
+    const property = await CfreProperty.findOne({
+      where: {
+        slug: { [Op.like]: slug }
+      }
+    });
 
 //     if (property) {
 //       res.status(200).json(property);
@@ -189,9 +233,11 @@ router.get('/cfreproperties/:slug', async (req, res) => {
     const property = await CfreProperty.findOne({ where: { slug } });
 
     if (property) {
+      console.log("Found property:", property);
       // Return the property if found
       return res.status(200).json(property);
     } else {
+      console.log("Property not found for slug:", slug);
       // Return a 404 if the property is not found
       return res.status(404).json({ error: "Property not found" });
     }
