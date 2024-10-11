@@ -9,7 +9,7 @@ const sequelize = new Sequelize('cfre_main', 'new_cfre_user', 'Str0ng_P@ssw0rd!'
 (async () => {
   try {
     await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
+    console.log('Connection has been ne established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }

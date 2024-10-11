@@ -31,6 +31,7 @@ app.use('/admin', adminRoutes);
 
 // Include the new route
 app.use('/api/listyourproperty', listYourPropertyRoute);
+//running on production
 
 // Listen on 8085 for production, or use 8001 for local development
 const PORT = process.env.PORT || 8085; 
