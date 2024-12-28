@@ -38,7 +38,12 @@ const storage = multer.diskStorage({
 });
 
 // Allow uploading multiple images
-const upload = multer({ storage: storage });
+ // const upload = multer({ storage: storage });
+// Allow uploading a file with a maximum size of 50MB
+const upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 50 * 1024 * 1024 } // 50 MB
+});
 
 // Bulk Upload Route this api use for propety bulk upload
 router.post('/cfreproperties/bulk-upload', upload.single('file'), async (req, res) => {
