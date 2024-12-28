@@ -36,8 +36,8 @@ app.use('/api', customerPropertyRoutes);
 
 //running on production
 
-// Listen on 8087 for production, or use 8001 for local development
-const PORT = process.env.PORT || 8087; 
+// Listen on 8088 for production, or use 8001 for local development
+const PORT = process.env.PORT || 8088; 
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
