@@ -4,7 +4,7 @@ const app = express();
 const propertyRoutes = require('./routes/propertyRoutes');
 const adminRoutes = require('./routes/admin'); 
 const listYourPropertyRoute = require('./routes/listyourproperty');
-
+const customerPropertyRoutes = require('./routes/customerProperty');
 // const contactForm = require('./routes/contactForm');
 // const projectRoutes = require('./routes/projectRoutes');
 
@@ -31,9 +31,12 @@ app.use('/admin', adminRoutes);
 
 // Include the new route
 app.use('/api/listyourproperty', listYourPropertyRoute);
+
+app.use('/api', customerPropertyRoutes); 
+
 //running on production
 
-// Listen on 8085 for production, or use 8001 for local development
+// Listen on 8087 for production, or use 8001 for local development
 const PORT = process.env.PORT || 8087; 
 
 app.listen(PORT, '0.0.0.0', () => {
