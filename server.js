@@ -5,6 +5,7 @@ const propertyRoutes = require('./routes/propertyRoutes');
 const adminRoutes = require('./routes/admin'); 
 const listYourPropertyRoute = require('./routes/listyourproperty');
 const customerPropertyRoutes = require('./routes/customerProperty');
+const cfreProjectsRoutes = require('./routes/cfreProjects');
 // const contactForm = require('./routes/contactForm');
 // const projectRoutes = require('./routes/projectRoutes');
 
@@ -15,13 +16,15 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
+
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
 // Use the property routes
 app.use('/', propertyRoutes);
-
+app.use('/cfreprojects', cfreProjectsRoutes);
 // Admin registration and login routes
 app.use('/admin', adminRoutes);
 
