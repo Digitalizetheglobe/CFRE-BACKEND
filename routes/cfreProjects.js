@@ -118,10 +118,25 @@ router.get('/', async (req, res) => {
   });
   
 // 🛠️ Update a project (PUT)
-router.put('/:slug', async (req, res) => {
+// router.put('/:slug', async (req, res) => {
+//   try {
+//     const project = await CfreProject.findOne({ where: { slug: req.params.slug } });
+//     if (!project) return res.status(404).json({ error: 'Project not found' });
+
+//     await project.update(req.body);
+//     res.json({ message: 'Project updated successfully', project });
+//   } catch (error) {
+//     console.error('Error:', error.message);
+//     res.status(400).json({ error: 'Failed to update project' });
+//   }
+// });
+
+router.put('/:id', async (req, res) => {
   try {
-    const project = await CfreProject.findOne({ where: { slug: req.params.slug } });
-    if (!project) return res.status(404).json({ error: 'Project not found' });
+    const project = await CfreProject.findOne({ where: { id: req.params.id } });
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
 
     await project.update(req.body);
     res.json({ message: 'Project updated successfully', project });
@@ -130,6 +145,7 @@ router.put('/:slug', async (req, res) => {
     res.status(400).json({ error: 'Failed to update project' });
   }
 });
+
 
 // 🗑️ Delete a project (DELETE)
 router.delete('/:slug', async (req, res) => {
