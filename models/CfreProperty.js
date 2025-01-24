@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     rentPerMonth: DataTypes.STRING,
     aboutProperty: DataTypes.TEXT,
     multiplePropertyImages: DataTypes.JSON,
-
+    Roi: DataTypes.STRING,
   });
 
   return CfreProperty;

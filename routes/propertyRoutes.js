@@ -13,34 +13,34 @@ const { SaleProperty } = require('../models');
 const { Project } = require('../models')
 // const { contactForm } = require('../models');
 // const {ContactForm} = require('../models');
-const { ContactForm } = require('../models'); 
-const {ShowroomProperty }= require('../models');
-const { CfreProperty } = require ('../models');
-const {sendContactFormEmail} = require('../mailer')
+const { ContactForm } = require('../models');
+const { ShowroomProperty } = require('../models');
+const { CfreProperty } = require('../models');
+const { sendContactFormEmail } = require('../mailer')
 const { Op } = require('sequelize');
 
 // Directory where files will be uploaded
 const uploadDir = 'uploads';
 
 // Create the directory if it doesn't exist
-if (!fs.existsSync(uploadDir)){
-    fs.mkdirSync(uploadDir);
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
 }
 
 // Configure Multer storage for multiple images
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, uploadDir);
+    cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-      cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
 // Allow uploading multiple images
- // const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
 // Allow uploading a file with a maximum size of 50MB
-const upload = multer({ 
+const upload = multer({
   storage: storage,
   limits: { fileSize: 50 * 1024 * 1024 } // 50 MB
 });
@@ -48,49 +48,49 @@ const upload = multer({
 // Bulk Upload Route this api use for propety bulk upload
 router.post('/cfreproperties/bulk-upload', upload.single('file'), async (req, res) => {
   try {
-      const file = req.file;
-      if (!file) {
-          return res.status(400).json({ error: 'No file uploaded' });
-      }
+    const file = req.file;
+    if (!file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
 
-      const filePath = path.join(__dirname, '..', 'uploads', file.filename);
-      const fileExtension = path.extname(file.originalname).toLowerCase();
+    const filePath = path.join(__dirname, '..', 'uploads', file.filename);
+    const fileExtension = path.extname(file.originalname).toLowerCase();
 
-      let properties = [];
+    let properties = [];
 
-      if (fileExtension === '.csv') {
-          // Parse CSV file
-          fs.createReadStream(filePath)
-              .pipe(csv())
-              .on('data', (row) => properties.push(row))
-              .on('end', async () => {
-                  try {
-                      await CfreProperty.bulkCreate(properties);
-                      fs.unlinkSync(filePath); // Remove the file after processing
-                      res.status(201).json({ message: 'Properties uploaded successfully' });
-                  } catch (error) {
-                      res.status(500).json({ error: error.message });
-                  }
-              });
-      } else if (fileExtension === '.xlsx') {
-          // Parse Excel file
+    if (fileExtension === '.csv') {
+      // Parse CSV file
+      fs.createReadStream(filePath)
+        .pipe(csv())
+        .on('data', (row) => properties.push(row))
+        .on('end', async () => {
           try {
-              const workbook = XLSX.readFile(filePath);
-              const sheetName = workbook.SheetNames[0]; // Assumes the first sheet
-              const sheet = workbook.Sheets[sheetName];
-              properties = XLSX.utils.sheet_to_json(sheet);
-
-              await CfreProperty.bulkCreate(properties);
-              fs.unlinkSync(filePath); // Remove the file after processing
-              res.status(201).json({ message: 'Properties uploaded successfully' });
+            await CfreProperty.bulkCreate(properties);
+            fs.unlinkSync(filePath); // Remove the file after processing
+            res.status(201).json({ message: 'Properties uploaded successfully' });
           } catch (error) {
-              res.status(500).json({ error: error.message });
+            res.status(500).json({ error: error.message });
           }
-      } else {
-          res.status(400).json({ error: 'Unsupported file type' });
+        });
+    } else if (fileExtension === '.xlsx') {
+      // Parse Excel file
+      try {
+        const workbook = XLSX.readFile(filePath);
+        const sheetName = workbook.SheetNames[0]; // Assumes the first sheet
+        const sheet = workbook.Sheets[sheetName];
+        properties = XLSX.utils.sheet_to_json(sheet);
+
+        await CfreProperty.bulkCreate(properties);
+        fs.unlinkSync(filePath); // Remove the file after processing
+        res.status(201).json({ message: 'Properties uploaded successfully' });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
       }
+    } else {
+      res.status(400).json({ error: 'Unsupported file type' });
+    }
   } catch (error) {
-      res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -98,7 +98,7 @@ router.post('/cfreproperties/bulk-upload', upload.single('file'), async (req, re
 router.post('/cfreproperties/bulk-delete', async (req, res) => {
   try {
     // Expect an array of IDs to be sent in the request body for deletion
-    const { propertyIds } = req.body; 
+    const { propertyIds } = req.body;
 
     if (!propertyIds || !Array.isArray(propertyIds)) {
       return res.status(400).json({ error: 'Invalid or missing propertyIds array' });
@@ -142,17 +142,17 @@ router.post('/cfreproperties/delete-all', async (req, res) => {
 
 // Add a property with multiple images
 router.post('/cfreproperties', upload.array('multiplePropertyImages', 10), async (req, res) => {
-  console.log('Files received:', req.files); // Debugging line
-  console.log('Form data received:', req.body); // Debugging line
+  console.log('Files received:', req.files); 
+  console.log('Form data received:', req.body); 
   try {
     const multiplePropertyImages = req.files ? req.files.map(file => file.path) : [];
     const cfreProperty = await CfreProperty.create({
       ...req.body,
-      multiplePropertyImages: multiplePropertyImages, // Save array of image paths
+      multiplePropertyImages: multiplePropertyImages, 
     });
     res.status(201).json(cfreProperty);
   } catch (error) {
-      res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -230,6 +230,7 @@ router.get('/cfreproperties', async (req, res) => {
 
 
 // Get a specific CfreProperty by slug
+
 router.get('/cfreproperties/:slug', async (req, res) => {
   try {
     const { slug } = req.params;
@@ -275,29 +276,29 @@ router.delete('/cfreproperties/:id', async (req, res) => {
 // Update a specific CfreProperty by ID (with image update support)
 router.put('/cfreproperties/:id', upload.array('propertyImages', 10), async (req, res) => {
   try {
-      const { id } = req.params;
+    const { id } = req.params;
 
-      // Check if new images are uploaded or use existing ones
-      const propertyImages = req.files ? req.files.map(file => file.path) : req.body.propertyImages;
+    // Check if new images are uploaded or use existing ones
+    const propertyImages = req.files ? req.files.map(file => file.path) : req.body.propertyImages;
 
-      const [updated] = await CfreProperty.update(
-          {
-              ...req.body,
-              propertyImages: JSON.stringify(propertyImages), // Store image paths as JSON array
-          },
-          {
-              where: { id },
-          }
-      );
-
-      if (updated) {
-          const updatedProperty = await CfreProperty.findOne({ where: { id } });
-          res.status(200).json(updatedProperty);
-      } else {
-          res.status(404).json({ error: "Property not found" });
+    const [updated] = await CfreProperty.update(
+      {
+        ...req.body,
+        propertyImages: JSON.stringify(propertyImages),
+      },
+      {
+        where: { id },
       }
+    );
+
+    if (updated) {
+      const updatedProperty = await CfreProperty.findOne({ where: { id } });
+      res.status(200).json(updatedProperty);
+    } else {
+      res.status(404).json({ error: "Property not found" });
+    }
   } catch (error) {
-      res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -305,20 +306,20 @@ router.put('/cfreproperties/:id', upload.array('propertyImages', 10), async (req
 // POST route to create a showroom property USING RIGHT NOW
 router.post('/showroomproperty', async (req, res) => {
   try {
-      const showroomProperty = await ShowroomProperty.create(req.body);
-      res.status(201).json(showroomProperty);
+    const showroomProperty = await ShowroomProperty.create(req.body);
+    res.status(201).json(showroomProperty);
   } catch (error) {
-      res.status(500).json({ error: 'Failed to create showroom property' });
+    res.status(500).json({ error: 'Failed to create showroom property' });
   }
 });
 
 // GET route to fetch all showroom properties USING RIGHT NOW
 router.get('/showroomproperty', async (req, res) => {
   try {
-      const showroomProperties = await ShowroomProperty.findAll();
-      res.status(200).json(showroomProperties);
+    const showroomProperties = await ShowroomProperty.findAll();
+    res.status(200).json(showroomProperties);
   } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch showroom properties' });
+    res.status(500).json({ error: 'Failed to fetch showroom properties' });
   }
 });
 
@@ -397,7 +398,7 @@ router.get('/projects', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch projects' });
   }
 });
-    
+
 // Get a specific Project by ID USING RIGHT NOW
 router.get('/projects/:id', async (req, res) => {
   try {
