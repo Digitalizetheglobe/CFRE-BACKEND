@@ -274,17 +274,58 @@ router.delete('/cfreproperties/:id', async (req, res) => {
 
 
 // Update a specific CfreProperty by ID (with image update support)
+ // router.put('/cfreproperties/:id', upload.array('propertyImages', 10), async (req, res) => {
+//   try {
+//     const { id } = req.params;
+
+//     // Check if new images are uploaded or use existing ones
+//     const propertyImages = req.files ? req.files.map(file => file.path) : req.body.propertyImages;
+
+//     const [updated] = await CfreProperty.update(
+//       {
+//         ...req.body,
+//         propertyImages: JSON.stringify(propertyImages),
+//       },
+//       {
+//         where: { id },
+//       }
+//     );
+
+//     if (updated) {
+//       const updatedProperty = await CfreProperty.findOne({ where: { id } });
+//       res.status(200).json(updatedProperty);
+//     } else {
+//       res.status(404).json({ error: "Property not found" });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+
+// Update a specific CfreProperty by ID (with image update support)
 router.put('/cfreproperties/:id', upload.array('propertyImages', 10), async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Check if new images are uploaded or use existing ones
-    const propertyImages = req.files ? req.files.map(file => file.path) : req.body.propertyImages;
+    // Retrieve existing property to handle images
+    const property = await CfreProperty.findOne({ where: { id } });
+    if (!property) {
+      return res.status(404).json({ error: "Property not found" });
+    }
 
+    // Parse existing images if available
+    let updatedImages = property.multiplePropertyImages ? JSON.parse(property.multiplePropertyImages) : [];
+
+    // Add new uploaded images
+    if (req.files) {
+      updatedImages = [...updatedImages, ...req.files.map(file => file.path)];
+    }
+
+    // Update the property
     const [updated] = await CfreProperty.update(
       {
         ...req.body,
-        propertyImages: JSON.stringify(propertyImages),
+        multiplePropertyImages: JSON.stringify(updatedImages), // Save updated images as JSON
       },
       {
         where: { id },
@@ -298,9 +339,12 @@ router.put('/cfreproperties/:id', upload.array('propertyImages', 10), async (req
       res.status(404).json({ error: "Property not found" });
     }
   } catch (error) {
+    console.error("Error updating property:", error);
     res.status(500).json({ error: error.message });
   }
 });
+
+
 
 
 // POST route to create a showroom property USING RIGHT NOW
