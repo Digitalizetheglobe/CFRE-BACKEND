@@ -301,7 +301,7 @@ router.delete('/cfreproperties/:id', async (req, res) => {
 //     res.status(500).json({ error: error.message });
 //   }
 // });
-
+//Prasad Update
 // Update a specific CfreProperty by ID (with image update support)
 router.put('/cfreproperties/:id', upload.array('propertyImages', 10), async (req, res) => {
   try {
