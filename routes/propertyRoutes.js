@@ -303,6 +303,7 @@ router.delete('/cfreproperties/:id', async (req, res) => {
 // });
 //Prasad Update
 // Update a specific CfreProperty by ID (with image update support)
+// Update a specific CfreProperty by ID (with image update support)
 router.put('/cfreproperties/:id', upload.array('propertyImages', 10), async (req, res) => {
   try {
     const { id } = req.params;
@@ -313,11 +314,17 @@ router.put('/cfreproperties/:id', upload.array('propertyImages', 10), async (req
       return res.status(404).json({ error: "Property not found" });
     }
 
-    // Parse existing images if available
-    let updatedImages = property.multiplePropertyImages ? JSON.parse(property.multiplePropertyImages) : [];
+    // Parse existing images safely
+    let updatedImages = [];
+    try {
+      updatedImages = property.multiplePropertyImages ? JSON.parse(property.multiplePropertyImages) : [];
+    } catch (parseError) {
+      console.error("Error parsing multiplePropertyImages:", parseError);
+      return res.status(400).json({ error: "Invalid property images data" });
+    }
 
     // Add new uploaded images
-    if (req.files) {
+    if (req.files && req.files.length > 0) {
       updatedImages = [...updatedImages, ...req.files.map(file => file.path)];
     }
 
