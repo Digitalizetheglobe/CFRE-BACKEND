@@ -306,54 +306,62 @@ router.delete('/cfreproperties/:id', async (req, res) => {
 // Update a specific CfreProperty by ID (with image update support)
 router.put('/cfreproperties/:id', upload.array('propertyImages', 10), async (req, res) => {
   try {
-      const { id } = req.params;
+    const { id } = req.params;
 
-      // Retrieve existing property to handle images
-      const property = await CfreProperty.findOne({ where: { id } });
-      if (!property) {
-          return res.status(404).json({ error: "Property not found" });
+    // Retrieve existing property to handle images
+    const property = await CfreProperty.findOne({ where: { id } });
+    if (!property) {
+      return res.status(404).json({ error: "Property not found" });
+    }
+
+    // Parse existing images safely
+    let updatedImages = [];
+    if (property.multiplePropertyImages) {
+      try {
+        const parsedImages = JSON.parse(property.multiplePropertyImages);
+        if (Array.isArray(parsedImages)) {
+          updatedImages = parsedImages;
+        } else {
+          console.warn("Invalid images format, resetting to empty array.");
+          updatedImages = [];
+        }
+      } catch (parseError) {
+        console.warn("Error parsing multiplePropertyImages:", parseError);
+        updatedImages = []; // Fallback to empty array
       }
+    }
 
-      // Parse existing images safely
-      let updatedImages = [];
-      if (property.multiplePropertyImages) {
-          try {
-              updatedImages = JSON.parse(property.multiplePropertyImages);
-              if (!Array.isArray(updatedImages)) throw new Error("Invalid images format");
-          } catch (parseError) {
-              console.warn("Error parsing multiplePropertyImages:", parseError);
-              updatedImages = []; // Fallback to empty array
-          }
+    // **Add this block here (after parsing existing images)**
+    // Add new uploaded images
+    if (req.files && req.files.length > 0) {
+      updatedImages = [
+        ...updatedImages,
+        ...req.files.map((file) => file.path.replace(/\\/g, "/")) // Convert backslashes to forward slashes
+      ];
+    }
+
+    // Update the property
+    const [updated] = await CfreProperty.update(
+      {
+        ...req.body,
+        multiplePropertyImages: JSON.stringify(updatedImages), // Save updated images as JSON
+      },
+      {
+        where: { id },
       }
+    );
 
-      // Add new uploaded images
-      if (req.files && req.files.length > 0) {
-          updatedImages = [...updatedImages, ...req.files.map((file) => file.path)];
-      }
-
-      // Update the property
-      const [updated] = await CfreProperty.update(
-          {
-              ...req.body,
-              multiplePropertyImages: JSON.stringify(updatedImages), // Save updated images as JSON
-          },
-          {
-              where: { id },
-          }
-      );
-
-      if (updated) {
-          const updatedProperty = await CfreProperty.findOne({ where: { id } });
-          res.status(200).json(updatedProperty);
-      } else {
-          res.status(404).json({ error: "Property not found" });
-      }
+    if (updated) {
+      const updatedProperty = await CfreProperty.findOne({ where: { id } });
+      res.status(200).json(updatedProperty);
+    } else {
+      res.status(404).json({ error: "Property not found" });
+    }
   } catch (error) {
-      console.error("Error updating property:", error);
-      res.status(500).json({ error: error.message });
+    console.error("Error updating property:", error);
+    res.status(500).json({ error: error.message });
   }
 });
-
 
 
 
