@@ -8,7 +8,7 @@ const customerPropertyRoutes = require('./routes/customerProperty');
 const cfreProjectsRoutes = require('./routes/cfreProjects');
 // const contactForm = require('./routes/contactForm');
 // const projectRoutes = require('./routes/projectRoutes');
-
+const coworkingRoutes = require('./routes/coworkingRoutes');
 // Configure CORS
 const corsOptions = {
   origin: '*',
@@ -36,12 +36,12 @@ app.use('/admin', adminRoutes);
 app.use('/api/listyourproperty', listYourPropertyRoute);
 
 app.use('/api', customerPropertyRoutes); 
-
+app.use('/coworking', coworkingRoutes);
 //running on production
 //New Port
 // Listen on 8088 for production, or use 8001 | 8088 for local development
 //8089
-const PORT = process.env.PORT || 8089;
+const PORT = process.env.PORT || 8001;
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
