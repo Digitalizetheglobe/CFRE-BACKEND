@@ -41,7 +41,7 @@ app.use('/coworking', coworkingRoutes);
 //New Port
 // Listen on 8088 for production, or use 8001 | 8088 for local development
 //8089
-const PORT = process.env.PORT || 8001;
+const PORT = process.env.PORT || 8091;
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
