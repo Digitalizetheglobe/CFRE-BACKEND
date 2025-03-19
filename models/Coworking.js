@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     city: DataTypes.STRING,
     location: DataTypes.STRING,
     pdf: DataTypes.STRING,
-    multipleImages: DataTypes.JSON, // Store JSON array as JSON (instead of TEXT)
+    multipleImages: DataTypes.JSON, 
     slug: { type: DataTypes.STRING, unique: true },
     title: DataTypes.STRING,
     description: DataTypes.TEXT,

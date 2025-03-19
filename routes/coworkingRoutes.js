@@ -1,7 +1,8 @@
 const express = require('express');
 const multer = require('multer');
 const { Coworking } = require('../models');
-
+const path = require('path');
+const fs = require('fs');
 
 const router = express.Router();
 
@@ -15,10 +16,23 @@ const storage = multer.diskStorage({
   },
 });
 
+// const upload = multer({
+//   storage,
+//   limits: { fileSize: 50 * 1024 * 1024 }, 
+// });
+
+
 const upload = multer({
   storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'application/pdf') {
+      cb(null, true);
+    } else {
+      cb(new Error('Only PDF files are allowed!'), false);
+    }
+  },
 });
+
 
 // Add a new coworking property
 router.post(
@@ -56,6 +70,7 @@ router.post(
     }
   }
 );
+
 
 // Fetch a single coworking property by slug
 router.get('/:slug', async (req, res) => {
@@ -139,10 +154,10 @@ router.put(
 );
 
 // Delete a coworking property
-router.delete('/:slug', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
-    const { slug } = req.params;
-    const coworking = await Coworking.findOne({ where: { slug } });
+    const { id } = req.params;
+    const coworking = await Coworking.findOne({ where: { id } });
 
     if (!coworking) {
       return res.status(404).json({ success: false, message: "Coworking property not found." });
@@ -153,8 +168,20 @@ router.delete('/:slug', async (req, res) => {
       fs.unlinkSync(coworking.pdf);
     }
 
+    // Ensure multipleImages is a valid array
+    let images = [];
+    if (coworking.multipleImages) {
+      try {
+        images = JSON.parse(coworking.multipleImages);
+        if (!Array.isArray(images)) {
+          images = [];
+        }
+      } catch (error) {
+        images = [];
+      }
+    }
+
     // Delete images
-    const images = JSON.parse(coworking.multipleImages || '[]');
     images.forEach(imgPath => {
       const fullPath = path.join(__dirname, '..', imgPath);
       if (fs.existsSync(fullPath)) {
@@ -171,6 +198,8 @@ router.delete('/:slug', async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error." });
   }
 });
+
+
 
 
 // Fetch all coworking properties
