@@ -20,7 +20,17 @@ module.exports = (sequelize, DataTypes) => {
       occupancyCertificate: DataTypes.STRING,
       approvedBy: DataTypes.STRING,
       specification: DataTypes.TEXT,
-      projectPlans: DataTypes.JSON,
+      projectPlans: {
+        type: DataTypes.JSON,
+        defaultValue: [],
+        get() {
+          const rawValue = this.getDataValue('projectPlans');
+          return rawValue ? JSON.parse(JSON.stringify(rawValue)) : [];
+        },
+        set(value) {
+          this.setDataValue('projectPlans', JSON.stringify(value));
+        }
+      },
       amenities: DataTypes.TEXT,
       floorPlanImages: DataTypes.JSON,
       video: DataTypes.STRING,

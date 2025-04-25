@@ -39,7 +39,7 @@ app.use('/api', customerPropertyRoutes);
 app.use('/coworking', coworkingRoutes);
 //running on production
 //New Port
-// Listen on 8088 for production, or use 8001 | 8088 for local development
+// Listen on 8094 for production, or use 8001 | 8088 for local development
 //8089
 const PORT = process.env.PORT || 8094;
 

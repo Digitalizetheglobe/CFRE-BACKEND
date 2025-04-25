@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const { CfreProject } = require('../models'); // Ensure the correct path to your model
+const { CfreProject } = require('../models'); 
 
 // 🛡️ Set up multer storage
 const storage = multer.diskStorage({
@@ -49,6 +49,9 @@ router.post(
         virtualVideoTour,
       } = req.body;
 
+      // Parse projectPlans if it's a string
+      const parsedProjectPlans = typeof projectPlans === 'string' ? JSON.parse(projectPlans) : projectPlans;
+
       console.log('Body:', req.body);
       console.log('Files:', req.files);
 
@@ -70,7 +73,7 @@ router.post(
         occupancyCertificate,
         approvedBy,
         specification,
-        projectPlans,
+        projectPlans: parsedProjectPlans,
         amenities,
         slug,
         discription,
