@@ -49,10 +49,31 @@ router.post(
         virtualVideoTour,
       } = req.body;
 
-      // Parse projectPlans if it's a string
-      const parsedProjectPlans = typeof projectPlans === 'string' ? JSON.parse(projectPlans) : projectPlans;
+      // Handle projectPlans data
+      let parsedProjectPlans = [];
+
+      if (projectPlans) {
+        try {
+          // If it's already a string, parse it
+          if (typeof projectPlans === 'string') {
+            parsedProjectPlans = JSON.parse(projectPlans);
+          } else {
+            // If it's already an object (from middleware parsing)
+            parsedProjectPlans = projectPlans;
+          }
+          
+          // Ensure it's an array
+          if (!Array.isArray(parsedProjectPlans)) {
+            parsedProjectPlans = [parsedProjectPlans];
+          }
+        } catch (error) {
+          console.error('Error parsing projectPlans:', error);
+          parsedProjectPlans = [];
+        }
+      }
 
       console.log('Body:', req.body);
+      console.log('Project Plans:', parsedProjectPlans);
       console.log('Files:', req.files);
 
       const ProjectImages = req.files?.['ProjectImages']?.map((file) => file.path) || [];
@@ -73,7 +94,7 @@ router.post(
         occupancyCertificate,
         approvedBy,
         specification,
-        projectPlans: parsedProjectPlans,
+        projectPlans: parsedProjectPlans, // Use the parsed project plans here
         amenities,
         slug,
         discription,
@@ -84,7 +105,7 @@ router.post(
         ProjectImages,
         floorPlanImages,
       });
-
+  
       res.status(201).json({
         message: 'Project created successfully',
         data: newProject,
@@ -108,7 +129,7 @@ router.get('/:slug', async (req, res) => {
       res.status(500).json({ error: 'Failed to retrieve project' });
     }
   });
-  
+
 // ✅ GET All Projects
 router.get('/', async (req, res) => {
     try {
@@ -119,21 +140,8 @@ router.get('/', async (req, res) => {
       res.status(500).json({ error: 'Failed to retrieve projects' });
     }
   });
-  
+
 // 🛠️ Update a project (PUT)
-// router.put('/:slug', async (req, res) => {
-//   try {
-//     const project = await CfreProject.findOne({ where: { slug: req.params.slug } });
-//     if (!project) return res.status(404).json({ error: 'Project not found' });
-
-//     await project.update(req.body);
-//     res.json({ message: 'Project updated successfully', project });
-//   } catch (error) {
-//     console.error('Error:', error.message);
-//     res.status(400).json({ error: 'Failed to update project' });
-//   }
-// });
-
 router.put('/:id', async (req, res) => {
   try {
     const project = await CfreProject.findOne({ where: { id: req.params.id } });
@@ -149,7 +157,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-
 // 🗑️ Delete a project (DELETE)
 router.delete('/:slug', async (req, res) => {
   try {
@@ -164,5 +171,5 @@ router.delete('/:slug', async (req, res) => {
   }
 });
 
-// Export the router once
+// Export the router
 module.exports = router;

@@ -331,7 +331,6 @@ router.put('/cfreproperties/:id', upload.array('propertyImages', 10), async (req
       }
     }
 
-    // **Add this block here (after parsing existing images)**
     // Add new uploaded images
     if (req.files && req.files.length > 0) {
       updatedImages = [
@@ -340,10 +339,13 @@ router.put('/cfreproperties/:id', upload.array('propertyImages', 10), async (req
       ];
     }
 
+    // Remove propertyImage from the request body to avoid the "data too long" error
+    const { propertyImage, ...restOfBody } = req.body;
+
     // Update the property
     const [updated] = await CfreProperty.update(
       {
-        ...req.body,
+        ...restOfBody, // Use the rest of the body without propertyImage
         multiplePropertyImages: JSON.stringify(updatedImages), // Save updated images as JSON
       },
       {

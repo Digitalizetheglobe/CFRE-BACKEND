@@ -22,14 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       specification: DataTypes.TEXT,
       projectPlans: {
         type: DataTypes.JSON,
-        defaultValue: [],
-        get() {
-          const rawValue = this.getDataValue('projectPlans');
-          return rawValue ? JSON.parse(JSON.stringify(rawValue)) : [];
-        },
-        set(value) {
-          this.setDataValue('projectPlans', JSON.stringify(value));
-        }
+        defaultValue: []
+        // Removed custom getter and setter to let Sequelize handle JSON
       },
       amenities: DataTypes.TEXT,
       floorPlanImages: DataTypes.JSON,
