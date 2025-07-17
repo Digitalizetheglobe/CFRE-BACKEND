@@ -34,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       discription: DataTypes.TEXT,
       keyword: DataTypes.STRING,
       title: DataTypes.STRING,
+      availableFor: DataTypes.STRING,
     },
     {
       sequelize,

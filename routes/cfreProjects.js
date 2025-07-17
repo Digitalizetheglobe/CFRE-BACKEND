@@ -38,6 +38,7 @@ router.post(
         commencementCertificate,
         occupancyCertificate,
         approvedBy,
+        availableFor,
         specification,
         projectPlans,
         amenities,
@@ -93,6 +94,7 @@ router.post(
         commencementCertificate,
         occupancyCertificate,
         approvedBy,
+        availableFor,
         specification,
         projectPlans: parsedProjectPlans, // Use the parsed project plans here
         amenities,

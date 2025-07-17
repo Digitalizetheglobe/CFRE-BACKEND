@@ -73,6 +73,10 @@ module.exports = (sequelize, DataTypes) => {
       virtualVideoTour: {
         type: DataTypes.STRING,
         allowNull: true,
+      },
+      availableFor: {
+        type: DataTypes.STRING,
+        allowNull: true,
       }
     }, {
       timestamps: false
