@@ -114,7 +114,12 @@ router.post(
       });
     } catch (error) {
       console.error('Error:', error.message);
-      res.status(500).json({ error: 'Failed to create project' });
+      console.error('Full error:', error);
+      res.status(500).json({ 
+        error: 'Failed to create project',
+        details: error.message,
+        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      });
     }
   }
 );
